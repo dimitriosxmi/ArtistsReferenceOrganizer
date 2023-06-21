@@ -13,13 +13,13 @@ const Breadcrumb = () => {
 
   //#region Breadcrumb text setup
   useEffect(() => {
-    (routePath = "") => {
+    ((routePath) => {
       if (routePath === "/") {
         setBreadcrumbText("Dashboard");
       } else {
         setBreadcrumbText("Unknown");
       }
-    };
+    })(routePath);
   }, [routePath]);
   //#endregion
 
