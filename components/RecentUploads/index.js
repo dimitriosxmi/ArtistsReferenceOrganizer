@@ -6,11 +6,13 @@ const RecentUploads = () => {
   const [text, setText] = useState("Recent Uploads");
   const [data, setData] = useState([]);
 
+  //#region Adapt the text based on data value
   useEffect(() => {
     data.length > 0
       ? setText("Recent Uploads")
       : setText("No uploaded files yet");
   }, [data]);
+  //#endregion
 
   return (
     <section>
