@@ -6,7 +6,7 @@ export default function App({ Component, pageProps }) {
     <>
       <GlobalStyle />
       <Head>
-        <title>AristsReferenceOrganizer</title>
+        <title>ArtistsReferenceOrganizer</title>
       </Head>
       <Component {...pageProps} />
     </>
