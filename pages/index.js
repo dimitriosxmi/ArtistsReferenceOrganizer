@@ -1,13 +1,11 @@
-import Headline from "../components/Headline";
-import Breadcrumb from "../components/Breadcrumb";
-import RecentUploads from "../components/RecentUploads";
+import Heading from "../components/Heading";
+import SubHeading from "../components/SubHeading";
 
 export default function Home() {
   return (
     <main>
-      <Headline>ARO</Headline>
-      <Breadcrumb />
-      <RecentUploads />
+      <Heading>🐬 Capstone Template 🐬</Heading>
+      <SubHeading>We dolphinitely love coding!</SubHeading>
     </main>
   );
 }
