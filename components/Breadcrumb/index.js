@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useEffect } from "react";
 
 const Breadcrumb = () => {
-  const [breadcrumb, setBreadcrumb] = useState("");
+  const [breadcrumbText, setBreadcrumbText] = useState("");
 
   //#region Router
   const router = useRouter();
@@ -13,19 +13,17 @@ const Breadcrumb = () => {
 
   //#region Breadcrumb text setup
   useEffect(() => {
-    function SetBreadcrumb(path = "") {
-      if (path === "/") {
-        setBreadcrumb("Dashboard");
+    (routePath = "") => {
+      if (routePath === "/") {
+        setBreadcrumbText("Dashboard");
       } else {
-        setBreadcrumb("Unknown");
+        setBreadcrumbText("Unknown");
       }
-    }
-
-    SetBreadcrumb(routePath);
+    };
   }, [routePath]);
   //#endregion
 
-  return <StyledBreadcrumb>{breadcrumb}</StyledBreadcrumb>;
+  return <StyledBreadcrumb>{breadcrumbText}</StyledBreadcrumb>;
 };
 
 const StyledBreadcrumb = styled.p`
