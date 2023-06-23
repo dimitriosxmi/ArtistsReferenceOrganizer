@@ -1,15 +1,16 @@
-// Components
+import BackButton from "../components/BackButton/BackButton";
 import CommonHeaderLayout from "../components/CommonHeaderLayout";
-import RecentUploads from "../components/RecentUploads";
 
-export default function Home({ sideBarOpen, setSideBarOpen }) {
+const Content = ({ sideBarOpen, setSideBarOpen }) => {
   return (
-    <main>
+    <>
       <CommonHeaderLayout
         sideBarOpen={sideBarOpen}
         setSideBarOpen={setSideBarOpen}
       />
-      <RecentUploads />
-    </main>
+      <BackButton />
+    </>
   );
-}
+};
+
+export default Content;
