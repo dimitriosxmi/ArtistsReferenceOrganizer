@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { useRouter } from "next/router";
+import Link from "next/link";
 
 const SideBar = ({ sideBarOpen, setSideBarOpen }) => {
   const router = useRouter();
@@ -8,19 +9,16 @@ const SideBar = ({ sideBarOpen, setSideBarOpen }) => {
     <>
       <StyledSideBarBackground onClick={() => handleOnClickBackground()} />
       <StyledSideBar>
-        <StyledButton onClick={() => handleOnClickButton("/")}>
-          🏠 Dashboard
-        </StyledButton>
+        <StyledLinks>
+          <StyledLink href="/" onClick={() => setSideBarOpen()}>
+            🏠 Dashboard
+          </StyledLink>
+        </StyledLinks>
       </StyledSideBar>
     </>
   ) : null;
 
-  //#region Click handler functions
-  function handleOnClickButton(path) {
-    router.push(path);
-    setSideBarOpen();
-  }
-
+  //#region Click handler function
   function handleOnClickBackground() {
     setSideBarOpen();
   }
@@ -42,14 +40,20 @@ const StyledSideBar = styled.div`
   background-color: #ccddeee0;
 `;
 
-const StyledButton = styled.button`
+const StyledLink = styled(Link)`
+  text-align: center;
   margin: 1vh 0 1vh 0;
-  position: relative;
-  width: 70vw;
-  height: 5vh;
+  padding: 1vh 0 1vh 0;
   border: 2px solid;
   border-radius: 20px;
   font-size: 1.5rem;
+  text-decoration: none;
+  color: inherit;
+`;
+
+const StyledLinks = styled.div`
+  display: flex;
+  flex-direction: column;
 `;
 
 const StyledSideBarBackground = styled.div`
