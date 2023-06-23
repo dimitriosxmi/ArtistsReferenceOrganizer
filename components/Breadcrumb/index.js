@@ -14,10 +14,16 @@ const Breadcrumb = () => {
   //#region Breadcrumb text setup
   useEffect(() => {
     ((routePath) => {
-      if (routePath === "/") {
-        setBreadcrumbText("Dashboard");
-      } else {
-        setBreadcrumbText("Unknown");
+      switch (routePath) {
+        case "/":
+          setBreadcrumbText("Dashboard");
+          break;
+        case "/content":
+          setBreadcrumbText("Content");
+          break;
+        default:
+          setBreadcrumbText("Unknown Page");
+          break;
       }
     })(routePath);
   }, [routePath]);

@@ -13,6 +13,9 @@ const SideBar = ({ sideBarOpen, setSideBarOpen }) => {
           <StyledLink href="/" onClick={() => setSideBarOpen()}>
             🏠 Dashboard
           </StyledLink>
+          <StyledLink href="/content" onClick={() => setSideBarOpen()}>
+            📚 Content
+          </StyledLink>
         </StyledLinks>
       </StyledSideBar>
     </>
@@ -29,6 +32,7 @@ export default SideBar;
 
 //#region Styled Objects
 const StyledSideBar = styled.div`
+  z-index: 2;
   position: absolute;
   top: 0%;
   border: 2px solid #448;
