@@ -7,6 +7,7 @@ const NewFolderButton = () => {
     <StyledLink href="/new-folder">
       <StyledFolderIcon />
       <StyledPlusIcon />
+      <StyledParagraphText>{"(NEW FOLDER)"}</StyledParagraphText>
     </StyledLink>
   );
 };
@@ -38,5 +39,14 @@ const StyledLink = styled(Link)`
   left: 5%;
   width: 120px;
   height: 110px;
+  text-decoration: none;
   color: inherit;
+`;
+
+const StyledParagraphText = styled.p`
+  text-align: center;
+  font-size: 0.9rem;
+  font-weight: 700;
+  position: relative;
+  bottom: 110px;
 `;
