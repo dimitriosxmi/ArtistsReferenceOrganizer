@@ -26,7 +26,6 @@ const StyledLink = styled.div`
   position: relative;
   left: 10px;
   top: -5px;
-  /* padding: 10px; */
   border: 2px solid #444488;
   border-radius: 10px;
   width: 45px;

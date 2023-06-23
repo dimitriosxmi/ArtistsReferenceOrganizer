@@ -21,6 +21,9 @@ const Breadcrumb = () => {
         case "/content":
           setBreadcrumbText("Content");
           break;
+        case "/new-folder":
+          setBreadcrumbText("(NEW FOLDER)");
+          break;
         default:
           setBreadcrumbText("Unknown Page");
           break;
