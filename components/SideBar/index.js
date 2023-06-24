@@ -61,6 +61,7 @@ const StyledLinks = styled.div`
 `;
 
 const StyledSideBarBackground = styled.div`
+  z-index: 99;
   position: fixed;
   top: 0;
   width: 100vw;

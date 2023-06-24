@@ -46,7 +46,7 @@ const StyledLink = styled(Link)`
 const StyledParagraphText = styled.p`
   text-align: center;
   font-size: 0.9rem;
-  font-weight: 700;
+  font-weight: 900;
   position: relative;
   bottom: 110px;
 `;
