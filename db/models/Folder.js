@@ -2,13 +2,16 @@ import mongoose from "mongoose";
 
 const { Schema } = mongoose;
 
-const folderSchema = new Schema({
-  folderName: {
-    type: String,
-    required: true,
+const folderSchema = new Schema(
+  {
+    folderName: {
+      type: String,
+      required: true,
+    },
+    folderColor: String,
   },
-  folderColor: String,
-});
+  { collection: "folders" }
+);
 
 const Folder = mongoose.models.Folder || mongoose.model("Folder", folderSchema);
 
