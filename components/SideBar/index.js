@@ -32,7 +32,7 @@ export default SideBar;
 
 //#region Styled Objects
 const StyledSideBar = styled.div`
-  z-index: 2;
+  z-index: 100;
   position: absolute;
   top: 0%;
   border: 2px solid #448;

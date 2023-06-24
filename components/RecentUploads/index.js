@@ -29,4 +29,5 @@ const StyledRecentUploadsText = styled.p`
   padding-bottom: 5px;
   width: 90%;
   margin-left: 5%;
+  margin-top: 100px;
 `;

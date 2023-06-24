@@ -22,7 +22,7 @@ export default SidebarButton;
 
 //#region Styled Objects
 const StyledBurgerButton = styled.button`
-  z-index: 3;
+  z-index: 200;
   position: absolute;
   left: 10px;
   top: 10px;
