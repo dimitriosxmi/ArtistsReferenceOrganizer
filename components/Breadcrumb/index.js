@@ -37,8 +37,8 @@ const Breadcrumb = () => {
 
 const StyledBreadcrumb = styled.p`
   text-align: center;
-  border-top: 2px solid;
-  border-bottom: 2px solid;
+  border-top: 2px solid #223;
+  border-bottom: 2px solid #223;
   padding: 5px;
 `;
 
