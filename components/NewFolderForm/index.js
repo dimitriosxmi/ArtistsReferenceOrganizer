@@ -12,7 +12,12 @@ const NewFolderForm = () => {
   return (
     <form onSubmit={handleOnSubmit}>
       <StyledFolderIcon foldercolor={folderColor} />
-      <StyledInput type="text" name="folderName" />
+      <StyledInput
+        type="text"
+        name="folderName"
+        placeholder="Enter here your folder name."
+        required
+      />
       <StyledButtons>
         <StyledColorPickButton
           colorvalue={"#38b"}
