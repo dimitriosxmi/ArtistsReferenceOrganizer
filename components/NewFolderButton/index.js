@@ -1,6 +1,7 @@
 import styled from "styled-components";
-import { FolderIcon, PlusIcon } from "../svgs";
 import Link from "next/link";
+// SVGs
+import { FolderIcon, PlusIcon } from "../svgs";
 
 const NewFolderButton = () => {
   return (
@@ -46,7 +47,7 @@ const StyledLink = styled(Link)`
 const StyledParagraphText = styled.p`
   text-align: center;
   font-size: 0.9rem;
-  font-weight: 700;
+  font-weight: 900;
   position: relative;
   bottom: 110px;
 `;

@@ -1,7 +1,9 @@
 import styled from "styled-components";
-import { FolderIcon, PlusIcon } from "../svgs";
+// Hooks
 import { useState } from "react";
 import { useRouter } from "next/router";
+// SVGs
+import { FolderIcon, PlusIcon } from "../svgs";
 
 const NewFolderForm = () => {
   const router = useRouter();
@@ -10,7 +12,12 @@ const NewFolderForm = () => {
   return (
     <form onSubmit={handleOnSubmit}>
       <StyledFolderIcon foldercolor={folderColor} />
-      <StyledInput type="text" name="folderName" />
+      <StyledInput
+        type="text"
+        name="folderName"
+        placeholder="Enter here your folder name."
+        required
+      />
       <StyledButtons>
         <StyledColorPickButton
           colorvalue={"#38b"}

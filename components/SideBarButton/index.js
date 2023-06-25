@@ -1,4 +1,5 @@
 import styled from "styled-components";
+// SVGs
 import { BurgerIcon, XIcon } from "../svgs";
 
 const SidebarButton = ({ sideBarOpen, setSideBarOpen }) => {

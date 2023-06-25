@@ -5,19 +5,19 @@ import Folder from "../../db/models/Folder.js";
 const handler = async (request, response) => {
   await dbConnect();
 
-  if (request.method === "POST") {
+  if (request.method === "GET") {
     try {
-      const folder = request.body;
-      await Folder.create(folder);
+      const folders = await Folder.find();
 
-      response.status(200).json({ status: "Success: Created Folder" });
-      return;
+      response
+        .status(200)
+        .json({ status: "Successful folders fetch!", data: folders });
     } catch (error) {
       console.log(error);
 
       response
         .status(400)
-        .json({ status: "Failed to create folder!", error: error.message });
+        .json({ status: "Failed to get folders!", error: error.message });
       return;
     }
   }

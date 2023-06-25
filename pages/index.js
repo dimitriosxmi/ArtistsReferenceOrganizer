@@ -1,6 +1,6 @@
 // Components
 import CommonHeaderLayout from "../components/CommonHeaderLayout";
-import NewFolderButton from "../components/NewFolderButton";
+import FolderPreviewList from "../components/FolderPreviewList";
 import RecentUploads from "../components/RecentUploads";
 
 export default function Home({ sideBarOpen, setSideBarOpen }) {
@@ -10,7 +10,7 @@ export default function Home({ sideBarOpen, setSideBarOpen }) {
         sideBarOpen={sideBarOpen}
         setSideBarOpen={setSideBarOpen}
       />
-      <NewFolderButton />
+      <FolderPreviewList />
       <RecentUploads />
     </main>
   );

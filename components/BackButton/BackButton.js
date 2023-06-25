@@ -1,6 +1,8 @@
 import styled from "styled-components";
-import { ArrowLeftLong } from "../svgs";
+// Hooks
 import { useRouter } from "next/router";
+// SVGs
+import { ArrowLeftLong } from "../svgs";
 
 const BackButton = () => {
   const router = useRouter();

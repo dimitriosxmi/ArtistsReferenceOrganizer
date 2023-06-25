@@ -1,6 +1,7 @@
 import styled from "styled-components";
-import { useRouter } from "next/router";
 import Link from "next/link";
+// Hooks
+import { useRouter } from "next/router";
 
 const SideBar = ({ sideBarOpen, setSideBarOpen }) => {
   const router = useRouter();
@@ -61,6 +62,7 @@ const StyledLinks = styled.div`
 `;
 
 const StyledSideBarBackground = styled.div`
+  z-index: 99;
   position: fixed;
   top: 0;
   width: 100vw;
