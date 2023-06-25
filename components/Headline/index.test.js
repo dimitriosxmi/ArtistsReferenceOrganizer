@@ -1,5 +1,6 @@
-import Headline from ".";
 import { render, screen } from "@testing-library/react";
+// Components
+import Headline from ".";
 
 test("Rendered Headline contains text ARO", () => {
   render(<Headline>ARO</Headline>);

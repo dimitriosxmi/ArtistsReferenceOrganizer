@@ -1,6 +1,7 @@
 import styled from "styled-components";
-import { useRouter } from "next/router";
 import Link from "next/link";
+// Hooks
+import { useRouter } from "next/router";
 
 const SideBar = ({ sideBarOpen, setSideBarOpen }) => {
   const router = useRouter();

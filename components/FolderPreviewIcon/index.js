@@ -1,5 +1,5 @@
-import Link from "next/link";
 import styled from "styled-components";
+// SVGs
 import { FolderIcon } from "../svgs";
 
 const FolderPreviewIcon = ({ data }) => {

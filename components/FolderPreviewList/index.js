@@ -1,5 +1,7 @@
 import styled from "styled-components";
+// Hooks
 import { useState, useEffect } from "react";
+
 import FolderPreviewIcon from "../FolderPreviewIcon";
 import NewFolderButton from "../NewFolderButton";
 

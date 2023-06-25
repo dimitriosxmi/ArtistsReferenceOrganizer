@@ -1,6 +1,7 @@
 import styled from "styled-components";
-import { FolderIcon, PlusIcon } from "../svgs";
 import Link from "next/link";
+// SVGs
+import { FolderIcon, PlusIcon } from "../svgs";
 
 const NewFolderButton = () => {
   return (

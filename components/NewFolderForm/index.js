@@ -1,7 +1,9 @@
 import styled from "styled-components";
-import { FolderIcon, PlusIcon } from "../svgs";
+// Hooks
 import { useState } from "react";
 import { useRouter } from "next/router";
+// SVGs
+import { FolderIcon, PlusIcon } from "../svgs";
 
 const NewFolderForm = () => {
   const router = useRouter();

@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import { useState } from "react";
-import { useEffect } from "react";
+// Hooks
+import { useState, useEffect } from "react";
 
 const RecentUploads = () => {
   const [text, setText] = useState("Recent Uploads");

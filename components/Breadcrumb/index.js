@@ -1,7 +1,7 @@
 import styled from "styled-components";
+// Hooks
+import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
-import { useState } from "react";
-import { useEffect } from "react";
 
 const Breadcrumb = () => {
   const [breadcrumbText, setBreadcrumbText] = useState("");
