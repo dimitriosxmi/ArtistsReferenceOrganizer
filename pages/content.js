@@ -1,6 +1,7 @@
 // Components
-import BackButton from "../components/BackButton/BackButton";
 import CommonHeaderLayout from "../components/CommonHeaderLayout";
+import BackButton from "../components/BackButton/BackButton";
+import NewEntryButton from "../components/NewEntryButton";
 
 const Content = ({ sideBarOpen, setSideBarOpen }) => {
   return (
@@ -10,6 +11,7 @@ const Content = ({ sideBarOpen, setSideBarOpen }) => {
         setSideBarOpen={setSideBarOpen}
       />
       <BackButton />
+      <NewEntryButton />
     </>
   );
 };
