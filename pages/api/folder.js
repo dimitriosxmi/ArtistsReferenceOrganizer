@@ -10,7 +10,7 @@ const handler = async (request, response) => {
       const folder = request.body;
       await Folder.create(folder);
 
-      response.status(200).json({ status: "Success: Created Folder" });
+      response.status(201).json({ status: "Success: Created Folder" });
       return;
     } catch (error) {
       console.log(error);
