@@ -23,6 +23,10 @@ const entrySchema = new Schema(
     entrySelectedFolder: {
       type: String,
     },
+    entryUploadDate: {
+      type: Number,
+      required: true,
+    },
   },
   { collection: "entries" }
 );
