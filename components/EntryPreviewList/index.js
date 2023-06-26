@@ -20,7 +20,7 @@ const EntryPreviewList = ({ recentEntriesAmount, hasData }) => {
             const jsonData = await response.json();
             const cleanData = jsonData.data;
             setEntries(cleanData);
-            hasData(cleanData);
+            if (hasData) hasData(cleanData);
           }
         }
         //#endregion
@@ -32,7 +32,7 @@ const EntryPreviewList = ({ recentEntriesAmount, hasData }) => {
             const jsonData = await response.json();
             const cleanData = jsonData.data;
             setEntries(cleanData);
-            hasData(cleanData);
+            if (hasData) hasData(cleanData);
           }
         }
         //#endregion
