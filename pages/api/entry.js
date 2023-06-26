@@ -1,23 +1,24 @@
 import dbConnect from "../../db/connect.js";
 // Models
-import Folder from "../../db/models/Folder.js";
+import Entry from "../../db/models/Entry.js";
 
 const handler = async (request, response) => {
   await dbConnect();
 
   if (request.method === "POST") {
     try {
-      const folder = request.body;
-      await Folder.create(folder);
+      const entry = request.body;
+      console.log(entry);
+      await Entry.create(entry);
 
-      response.status(201).json({ status: "Success: Created Folder" });
+      response.status(201).json({ status: "Success entry post!" });
       return;
     } catch (error) {
       console.log(error);
 
       response
         .status(400)
-        .json({ status: "Failed to create folder!", error: error.message });
+        .json({ status: "Failed to post entry!", error: error.message });
       return;
     }
   }

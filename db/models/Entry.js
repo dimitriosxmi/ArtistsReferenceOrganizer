@@ -1,0 +1,32 @@
+import mongoose from "mongoose";
+
+const { Schema } = mongoose;
+
+const entrySchema = new Schema(
+  {
+    entryName: {
+      type: String,
+      required: true,
+    },
+    entryUploadFile: {
+      type: String,
+    },
+    entryReferenceLink: {
+      type: String,
+    },
+    entryDescription: {
+      type: String,
+    },
+    entryTags: {
+      type: [String],
+    },
+    entrySelectedFolder: {
+      type: String,
+    },
+  },
+  { collection: "entries" }
+);
+
+const Entry = mongoose.models.Entry || mongoose.model("Entry", entrySchema);
+
+export default Entry;

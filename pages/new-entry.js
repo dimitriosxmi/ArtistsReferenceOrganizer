@@ -1,9 +1,9 @@
 // Components
 import CommonHeaderLayout from "../components/CommonHeaderLayout";
 import BackButton from "../components/BackButton/BackButton";
-import NewEntryButton from "../components/NewEntryButton";
+import NewEntryForm from "../components/NewEntryForm";
 
-const Content = ({ sideBarOpen, setSideBarOpen }) => {
+const NewEntry = ({ sideBarOpen, setSideBarOpen }) => {
   return (
     <>
       <CommonHeaderLayout
@@ -11,9 +11,9 @@ const Content = ({ sideBarOpen, setSideBarOpen }) => {
         setSideBarOpen={setSideBarOpen}
       />
       <BackButton />
-      <NewEntryButton />
+      <NewEntryForm />
     </>
   );
 };
 
-export default Content;
+export default NewEntry;
