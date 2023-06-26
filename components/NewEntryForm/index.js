@@ -26,7 +26,7 @@ const NewEntryForm = () => {
     event.preventDefault();
     const formData = new FormData(event.target);
     const data = Object.fromEntries(formData);
-    console.log(data);
+    data.entryUploadDate = new Date().valueOf();
     const response = await fetch("/api/entry", {
       method: "POST",
       headers: {
