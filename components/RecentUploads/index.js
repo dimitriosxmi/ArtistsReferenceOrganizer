@@ -30,4 +30,5 @@ const StyledRecentUploadsText = styled.p`
   width: 90%;
   margin-left: 5%;
   margin-top: 100px;
+  margin-bottom: 200px;
 `;
