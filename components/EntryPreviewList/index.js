@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 // Components
 import EntryPreview from "../EntryPreview";
 
-const EntryPreviewList = ({ recentEntries, hasData }) => {
+const EntryPreviewList = ({ recentEntriesAmount, hasData }) => {
   const [entries, setEntries] = useState([]);
 
   //#region Get entries from database
@@ -11,9 +11,9 @@ const EntryPreviewList = ({ recentEntries, hasData }) => {
     (async () => {
       try {
         //#region Get # most recent entries
-        if (recentEntries) {
+        if (recentEntriesAmount) {
           const response = await fetch(
-            `/api/entries?recentEntries=${recentEntries}`
+            `/api/entries?recentEntriesAmount=${recentEntriesAmount}`
           );
 
           if (response.ok) {

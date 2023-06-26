@@ -2,14 +2,14 @@ import dbConnect from "../../db/connect.js";
 import Entry from "../../db/models/Entry.js";
 
 const handler = async (request, response) => {
-  const { recentEntries } = request.query;
+  const { recentEntriesAmount } = request.query;
   await dbConnect();
 
-  if (request.method === "GET" && recentEntries) {
+  if (request.method === "GET" && recentEntriesAmount) {
     try {
       const entries = await Entry.find({})
         .sort({ entryUploadDate: -1 })
-        .limit(recentEntries);
+        .limit(recentEntriesAmount);
 
       response
         .status(200)
