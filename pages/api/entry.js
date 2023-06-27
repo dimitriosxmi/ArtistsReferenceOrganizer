@@ -8,7 +8,6 @@ const handler = async (request, response) => {
   if (request.method === "POST") {
     try {
       const entry = request.body;
-      console.log(entry);
       await Entry.create(entry);
 
       response.status(201).json({ status: "Success entry post!" });

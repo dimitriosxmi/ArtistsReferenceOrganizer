@@ -1,6 +1,8 @@
 import styled from "styled-components";
 // Hooks
 import { useState, useEffect } from "react";
+// Components
+import EntryPreviewList from "../EntryPreviewList";
 
 const RecentUploads = () => {
   const [text, setText] = useState("Recent Uploads");
@@ -17,6 +19,7 @@ const RecentUploads = () => {
   return (
     <section>
       <StyledRecentUploadsText>{text}</StyledRecentUploadsText>
+      <EntryPreviewList recentEntriesAmount={20} hasData={setData} />
     </section>
   );
 };
@@ -30,5 +33,4 @@ const StyledRecentUploadsText = styled.p`
   width: 90%;
   margin-left: 5%;
   margin-top: 100px;
-  margin-bottom: 200px;
 `;
