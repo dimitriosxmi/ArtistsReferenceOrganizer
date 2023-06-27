@@ -1,10 +1,12 @@
 import dbConnect from "../../db/connect.js";
+// Models
 import Entry from "../../db/models/Entry.js";
 
 const handler = async (request, response) => {
-  const { recentEntriesAmount } = request.query;
+  const { recentEntriesAmount, selectedFolderId } = request.query;
   await dbConnect();
 
+  // Get specific amount of most recent.
   if (request.method === "GET" && recentEntriesAmount) {
     try {
       const entries = await Entry.find({})
@@ -25,6 +27,28 @@ const handler = async (request, response) => {
     }
   }
 
+  // Get all with folder id.
+  if (request.method === "GET" && selectedFolderId) {
+    try {
+      const entries = await Entry.find({
+        entrySelectedFolder: selectedFolderId,
+      });
+
+      response
+        .status(200)
+        .json({ status: "Sucess get folder entries!", data: entries });
+      return;
+    } catch (error) {
+      console.log(error);
+
+      response
+        .status(400)
+        .json({ status: "Failure get folder entries!", error: error.message });
+      return;
+    }
+  }
+
+  // Get all data.
   if (request.method === "GET") {
     try {
       const entries = await Entry.find({});

@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 // Components
 import EntryPreview from "../EntryPreview";
 
-const EntryPreviewList = ({ recentEntriesAmount, hasData }) => {
+const EntryPreviewList = ({ recentEntriesAmount, hasData, folderId }) => {
   const [entries, setEntries] = useState([]);
 
   //#region Get entries from database
@@ -17,10 +17,21 @@ const EntryPreviewList = ({ recentEntriesAmount, hasData }) => {
           );
 
           if (response.ok) {
-            const jsonData = await response.json();
-            const cleanData = jsonData.data;
-            setEntries(cleanData);
-            if (hasData) hasData(cleanData);
+            const { data } = await response.json();
+            setEntries(data);
+            if (hasData) hasData(data);
+          }
+        }
+        //#endregion
+        //#region Get entries of specific folder
+        else if (folderId) {
+          const response = await fetch(
+            `/api/entries?selectedFolderId=${folderId}`
+          );
+
+          if (response.ok) {
+            const { data } = await response.json();
+            setEntries(data);
           }
         }
         //#endregion
@@ -29,10 +40,9 @@ const EntryPreviewList = ({ recentEntriesAmount, hasData }) => {
           const response = await fetch("/api/entries");
 
           if (response.ok) {
-            const jsonData = await response.json();
-            const cleanData = jsonData.data;
-            setEntries(cleanData);
-            if (hasData) hasData(cleanData);
+            const { data } = await response.json();
+            setEntries(data);
+            if (hasData) hasData(data);
           }
         }
         //#endregion
@@ -41,7 +51,7 @@ const EntryPreviewList = ({ recentEntriesAmount, hasData }) => {
         throw new Error(error.message);
       }
     })();
-  }, []);
+  }, [folderId, hasData, recentEntriesAmount]);
   //#endregion
 
   if (!entries) return <p>Loading entries..</p>;

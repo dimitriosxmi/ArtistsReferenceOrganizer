@@ -15,6 +15,7 @@ const NewFolderButton = () => {
 
 export default NewFolderButton;
 
+//#region Styled Objects
 const StyledFolderIcon = styled(FolderIcon)`
   position: relative;
   z-index: 0;
@@ -51,3 +52,4 @@ const StyledParagraphText = styled.p`
   position: relative;
   bottom: 110px;
 `;
+//#endregion

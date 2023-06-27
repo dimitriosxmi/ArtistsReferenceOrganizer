@@ -15,6 +15,7 @@ const BackButton = () => {
 
 export default BackButton;
 
+//#region Styled Objects
 const StyledArrowLeftLong = styled(ArrowLeftLong)`
   z-index: -1;
   color: #333;
@@ -33,3 +34,4 @@ const StyledLink = styled.div`
   width: 45px;
   height: 45px;
 `;
+//#endregion

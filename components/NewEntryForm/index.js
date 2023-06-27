@@ -6,6 +6,7 @@ import { PlusIcon } from "../svgs";
 
 const NewEntryForm = () => {
   const router = useRouter();
+  const { folderId } = router.query;
 
   return (
     <form onSubmit={handleOnSubmit}>
@@ -26,7 +27,14 @@ const NewEntryForm = () => {
     event.preventDefault();
     const formData = new FormData(event.target);
     const data = Object.fromEntries(formData);
+    // Apply current new Date as timestamp.
     data.entryUploadDate = new Date().valueOf();
+    // Selected folder not provided AND folderId provided
+    // apply folderId to selected folder.
+    !data.entrySelectedFolder && folderId
+      ? (data.entrySelectedFolder = folderId)
+      : null;
+    // POST the entry.
     const response = await fetch("/api/entry", {
       method: "POST",
       headers: {
@@ -36,6 +44,10 @@ const NewEntryForm = () => {
     });
 
     if (response.ok) {
+      if (folderId) {
+        router.push(`/folder/${folderId}`);
+        return;
+      }
       router.push("/");
     }
   }
@@ -43,6 +55,7 @@ const NewEntryForm = () => {
 
 export default NewEntryForm;
 
+//#region Styled Objects
 const StyledInput = styled.input`
   margin: 20px 0 20px 5%;
   border: 2px dashed #448;
@@ -67,3 +80,4 @@ const StyledSubmitButton = styled.button`
   border-radius: 10px;
   background: #40cc90;
 `;
+//#endregion

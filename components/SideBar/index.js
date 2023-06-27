@@ -1,11 +1,7 @@
 import styled from "styled-components";
 import Link from "next/link";
-// Hooks
-import { useRouter } from "next/router";
 
 const SideBar = ({ sideBarOpen, setSideBarOpen }) => {
-  const router = useRouter();
-
   return sideBarOpen ? (
     <>
       <StyledSideBarBackground onClick={() => handleOnClickBackground()} />
@@ -22,11 +18,9 @@ const SideBar = ({ sideBarOpen, setSideBarOpen }) => {
     </>
   ) : null;
 
-  //#region Click handler function
   function handleOnClickBackground() {
     setSideBarOpen();
   }
-  //#endregion
 };
 
 export default SideBar;

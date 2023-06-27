@@ -1,18 +1,20 @@
 import styled from "styled-components";
+import Link from "next/link";
 // SVGs
 import { FolderIcon } from "../svgs";
 
-const FolderPreviewIcon = ({ data }) => {
+const FolderPreviewButton = ({ data }) => {
   return (
-    <StyledFolder>
+    <StyledFolderLink href={`/folder/${data._id}`}>
       <StyledFolderIcon foldercolor={data.folderColor} />
       <StyledParagraphText>{data.folderName}</StyledParagraphText>
-    </StyledFolder>
+    </StyledFolderLink>
   );
 };
 
-export default FolderPreviewIcon;
+export default FolderPreviewButton;
 
+//#region Styled Objects
 const StyledFolderIcon = styled(FolderIcon)`
   z-index: 0;
   width: 100%;
@@ -20,7 +22,8 @@ const StyledFolderIcon = styled(FolderIcon)`
   color: ${({ foldercolor }) => foldercolor};
 `;
 
-const StyledFolder = styled.div`
+const StyledFolderLink = styled(Link)`
+  display: inline-block;
   z-index: 1;
   width: 30%;
   text-decoration: none;
@@ -35,3 +38,4 @@ const StyledParagraphText = styled.p`
   position: relative;
   bottom: 5%;
 `;
+//#endregion

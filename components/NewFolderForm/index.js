@@ -50,8 +50,10 @@ const NewFolderForm = () => {
     event.preventDefault();
     const formData = new FormData(event.target);
     const data = Object.fromEntries(formData);
+    // Add selected folderColor to data.
     const fullData = { ...data, folderColor: folderColor };
 
+    // POST the folder.
     const response = await fetch("/api/folder", {
       method: "POST",
       headers: {

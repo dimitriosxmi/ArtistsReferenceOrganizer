@@ -3,9 +3,11 @@ import Link from "next/link";
 // SVGs
 import { EntryFileIcon, PlusIcon } from "../svgs";
 
-const NewEntryButton = () => {
+const NewEntryButton = ({ folderId }) => {
   return (
-    <StyledLink href="/new-entry">
+    <StyledLink
+      href={folderId ? `/new-entry?folderId=${folderId}` : `/new-entry`}
+    >
       <StyledEntryFileIcon />
       <StyledPlusIcon />
       <StyledParagraphText>(NEW ENTRY)</StyledParagraphText>
@@ -15,6 +17,7 @@ const NewEntryButton = () => {
 
 export default NewEntryButton;
 
+//#region Styled Objects
 const StyledEntryFileIcon = styled(EntryFileIcon)`
   position: relative;
   z-index: 1;
@@ -53,3 +56,4 @@ const StyledParagraphText = styled.p`
   position: relative;
   bottom: 225%;
 `;
+//#endregion
