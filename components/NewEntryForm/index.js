@@ -6,6 +6,7 @@ import { PlusIcon } from "../svgs";
 
 const NewEntryForm = () => {
   const router = useRouter();
+  const { folderId } = router.query;
 
   return (
     <form onSubmit={handleOnSubmit}>
@@ -27,6 +28,7 @@ const NewEntryForm = () => {
     const formData = new FormData(event.target);
     const data = Object.fromEntries(formData);
     data.entryUploadDate = new Date().valueOf();
+    folderId ? (data.entrySelectedFolder = folderId) : null;
     const response = await fetch("/api/entry", {
       method: "POST",
       headers: {
@@ -36,6 +38,10 @@ const NewEntryForm = () => {
     });
 
     if (response.ok) {
+      if (folderId) {
+        router.push(`/folder/${folderId}`);
+        return;
+      }
       router.push("/");
     }
   }
