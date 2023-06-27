@@ -2,7 +2,7 @@ import styled from "styled-components";
 // Hooks
 import { useState, useEffect } from "react";
 
-import FolderPreviewIcon from "../FolderPreviewIcon";
+import FolderPreviewButton from "../FolderPreviewButton";
 import NewFolderButton from "../NewFolderButton";
 
 const FolderPreviewList = () => {
@@ -31,7 +31,7 @@ const FolderPreviewList = () => {
   return (
     <StyledFolderPreviewList>
       {dataFolders.map((folderData) => {
-        return <FolderPreviewIcon key={folderData._id} data={folderData} />;
+        return <FolderPreviewButton key={folderData._id} data={folderData} />;
       })}
       <NewFolderButton />
     </StyledFolderPreviewList>
