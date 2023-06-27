@@ -13,14 +13,14 @@ const handler = async (request, response) => {
 
       response
         .status(200)
-        .json({ status: "Success to get folder!", data: folder });
+        .json({ status: "Success get folder by id!", data: folder });
       return;
     } catch (error) {
       console.log(error);
 
       response
         .status(400)
-        .json({ status: "Faillure to get folder!", error: error.message });
+        .json({ status: "Faillure get folder by id!", error: error.message });
       return;
     }
   }
@@ -31,14 +31,14 @@ const handler = async (request, response) => {
       const folder = request.body;
       await Folder.create(folder);
 
-      response.status(201).json({ status: "Success: Created Folder" });
+      response.status(201).json({ status: "Success post Folder" });
       return;
     } catch (error) {
       console.log(error);
 
       response
         .status(400)
-        .json({ status: "Failed to create folder!", error: error.message });
+        .json({ status: "Failure post folder!", error: error.message });
       return;
     }
   }
