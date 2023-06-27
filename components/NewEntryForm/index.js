@@ -28,7 +28,9 @@ const NewEntryForm = () => {
     const formData = new FormData(event.target);
     const data = Object.fromEntries(formData);
     data.entryUploadDate = new Date().valueOf();
-    folderId ? (data.entrySelectedFolder = folderId) : null;
+    !data.entrySelectedFolder && folderId
+      ? (data.entrySelectedFolder = folderId)
+      : null;
     const response = await fetch("/api/entry", {
       method: "POST",
       headers: {
