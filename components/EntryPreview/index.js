@@ -10,6 +10,7 @@ const EntryPreview = ({ entryData }) => {
 
 export default EntryPreview;
 
+//#region Styled Objects
 const StyledEntryPreviewCard = styled.div`
   width: 90%;
   height: 75px;
@@ -30,3 +31,4 @@ const StyledEntryName = styled.p`
   overflow: hidden;
   text-overflow: ellipsis;
 `;
+//#endregion

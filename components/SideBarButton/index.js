@@ -21,7 +21,6 @@ const SidebarButton = ({ sideBarOpen, setSideBarOpen }) => {
 
 export default SidebarButton;
 
-//#region Styled Objects
 const StyledBurgerButton = styled.button`
   z-index: 200;
   position: absolute;
@@ -34,4 +33,3 @@ const StyledBurgerButton = styled.button`
   color: #333;
   background-color: white;
 `;
-//#endregion

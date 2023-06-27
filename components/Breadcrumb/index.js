@@ -9,7 +9,7 @@ const Breadcrumb = () => {
   //#region Router
   const router = useRouter();
   const routePath = router.asPath;
-  const routerParams = router.query;
+  const { folderId } = router.query;
   //#endregion
 
   //#region Breadcrumb text setup
@@ -28,18 +28,16 @@ const Breadcrumb = () => {
         case "/new-entry":
           setBreadcrumbText("(NEW ENTRY)");
           break;
-        case `/folder/${routerParams.folderId}`:
+        case `/folder/${folderId}`:
           (async () => {
             // Get folder by id
-            const response = await fetch(
-              `/api/folder?folderId=${routerParams.folderId}`
-            );
+            const response = await fetch(`/api/folder?folderId=${folderId}`);
 
             if (response.ok) {
-              // Refine data
-              const jsonData = await response.json();
-              const cleanData = jsonData.data;
-              const folderName = cleanData.folderName;
+              // Nested destructure the folderName out of data.
+              const {
+                data: { folderName },
+              } = await response.json();
 
               setBreadcrumbText(`Dashboard/ folder/ ${folderName}`);
             }
@@ -50,11 +48,13 @@ const Breadcrumb = () => {
           break;
       }
     })(routePath);
-  }, [routePath, routerParams]);
+  }, [routePath, folderId]);
   //#endregion
 
   return <StyledBreadcrumb>{breadcrumbText}</StyledBreadcrumb>;
 };
+
+export default Breadcrumb;
 
 const StyledBreadcrumb = styled.p`
   text-align: center;
@@ -62,5 +62,3 @@ const StyledBreadcrumb = styled.p`
   border-bottom: 2px solid #223;
   padding: 5px;
 `;
-
-export default Breadcrumb;

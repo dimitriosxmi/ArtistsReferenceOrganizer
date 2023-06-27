@@ -17,6 +17,7 @@ const NewEntryButton = ({ folderId }) => {
 
 export default NewEntryButton;
 
+//#region Styled Objects
 const StyledEntryFileIcon = styled(EntryFileIcon)`
   position: relative;
   z-index: 1;
@@ -55,3 +56,4 @@ const StyledParagraphText = styled.p`
   position: relative;
   bottom: 225%;
 `;
+//#endregion

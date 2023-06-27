@@ -5,6 +5,7 @@ import Entry from "../../db/models/Entry.js";
 const handler = async (request, response) => {
   await dbConnect();
 
+  // POST an entry.
   if (request.method === "POST") {
     try {
       const entry = request.body;

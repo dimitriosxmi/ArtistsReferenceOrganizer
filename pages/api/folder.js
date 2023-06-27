@@ -6,6 +6,7 @@ const handler = async (request, response) => {
   const { folderId } = request.query;
   await dbConnect();
 
+  // Get folder by id.
   if (request.method === "GET" && folderId) {
     try {
       const folder = await Folder.findById(folderId);
@@ -24,6 +25,7 @@ const handler = async (request, response) => {
     }
   }
 
+  // POST a folder.
   if (request.method === "POST") {
     try {
       const folder = request.body;

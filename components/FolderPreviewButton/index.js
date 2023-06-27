@@ -14,6 +14,7 @@ const FolderPreviewButton = ({ data }) => {
 
 export default FolderPreviewButton;
 
+//#region Styled Objects
 const StyledFolderIcon = styled(FolderIcon)`
   z-index: 0;
   width: 100%;
@@ -37,3 +38,4 @@ const StyledParagraphText = styled.p`
   position: relative;
   bottom: 5%;
 `;
+//#endregion

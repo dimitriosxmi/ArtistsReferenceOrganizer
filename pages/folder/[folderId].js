@@ -9,8 +9,7 @@ import EntryPreviewList from "../../components/EntryPreviewList";
 
 const FolderView = ({ sideBarOpen, setSideBarOpen }) => {
   const router = useRouter();
-  const routerParams = router.query;
-  const folderId = routerParams.folderId;
+  const { folderId } = router.query;
 
   return (
     <>

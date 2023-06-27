@@ -5,6 +5,7 @@ import Folder from "../../db/models/Folder.js";
 const handler = async (request, response) => {
   await dbConnect();
 
+  // GET all folders.
   if (request.method === "GET") {
     try {
       const folders = await Folder.find();

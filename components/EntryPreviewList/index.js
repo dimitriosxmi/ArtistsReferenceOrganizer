@@ -17,10 +17,9 @@ const EntryPreviewList = ({ recentEntriesAmount, hasData, folderId }) => {
           );
 
           if (response.ok) {
-            const jsonData = await response.json();
-            const cleanData = jsonData.data;
-            setEntries(cleanData);
-            if (hasData) hasData(cleanData);
+            const { data } = await response.json();
+            setEntries(data);
+            if (hasData) hasData(data);
           }
         }
         //#endregion
@@ -31,9 +30,8 @@ const EntryPreviewList = ({ recentEntriesAmount, hasData, folderId }) => {
           );
 
           if (response.ok) {
-            const jsonData = await response.json();
-            const cleanData = jsonData.data;
-            setEntries(cleanData);
+            const { data } = await response.json();
+            setEntries(data);
           }
         }
         //#endregion
@@ -42,10 +40,9 @@ const EntryPreviewList = ({ recentEntriesAmount, hasData, folderId }) => {
           const response = await fetch("/api/entries");
 
           if (response.ok) {
-            const jsonData = await response.json();
-            const cleanData = jsonData.data;
-            setEntries(cleanData);
-            if (hasData) hasData(cleanData);
+            const { data } = await response.json();
+            setEntries(data);
+            if (hasData) hasData(data);
           }
         }
         //#endregion
