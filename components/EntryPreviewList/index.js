@@ -54,7 +54,7 @@ const EntryPreviewList = ({ recentEntriesAmount, hasData, folderId }) => {
         throw new Error(error.message);
       }
     })();
-  }, []);
+  }, [folderId, hasData, recentEntriesAmount]);
   //#endregion
 
   if (!entries) return <p>Loading entries..</p>;
