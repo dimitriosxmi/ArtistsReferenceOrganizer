@@ -36,7 +36,7 @@ const handler = async (request, response) => {
 
       response
         .status(200)
-        .json({ status: "Sucess get folder entries!", data: entries });
+        .json({ status: "Success get folder entries!", data: entries });
       return;
     } catch (error) {
       console.log(error);
@@ -55,14 +55,14 @@ const handler = async (request, response) => {
 
       response
         .status(200)
-        .json({ status: "Success get entries!", data: entries });
+        .json({ status: "Success get all entries!", data: entries });
       return;
     } catch (error) {
       console.log(error);
 
       response
         .status(400)
-        .json({ status: "Failure get entries!", error: error.message });
+        .json({ status: "Failure get all entries!", error: error.message });
       return;
     }
   }

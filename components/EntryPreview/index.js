@@ -1,8 +1,11 @@
 import styled from "styled-components";
+import Link from "next/link";
 
 const EntryPreview = ({ entryData }) => {
+  const { _id: entryId } = entryData;
+
   return (
-    <StyledEntryPreviewCard>
+    <StyledEntryPreviewCard href={`/${entryId}`}>
       <StyledEntryName>{entryData.entryName}</StyledEntryName>
     </StyledEntryPreviewCard>
   );
@@ -11,7 +14,7 @@ const EntryPreview = ({ entryData }) => {
 export default EntryPreview;
 
 //#region Styled Objects
-const StyledEntryPreviewCard = styled.div`
+const StyledEntryPreviewCard = styled(Link)`
   width: 90%;
   height: 75px;
   margin: 5px 0 5px 5%;
@@ -22,6 +25,8 @@ const StyledEntryPreviewCard = styled.div`
   white-space: nowrap;
   border: 2px solid #223;
   border-radius: 5px;
+  text-decoration: none;
+  color: inherit;
 `;
 
 const StyledEntryName = styled.p`

@@ -12,13 +12,13 @@ const handler = async (request, response) => {
 
       response
         .status(200)
-        .json({ status: "Successful folders fetch!", data: folders });
+        .json({ status: "Success get all folders!", data: folders });
     } catch (error) {
       console.log(error);
 
       response
         .status(400)
-        .json({ status: "Failed to get folders!", error: error.message });
+        .json({ status: "Failure get all folders!", error: error.message });
       return;
     }
   }

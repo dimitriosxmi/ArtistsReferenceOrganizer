@@ -9,7 +9,7 @@ const Breadcrumb = () => {
   //#region Router
   const router = useRouter();
   const routePath = router.asPath;
-  const { folderId } = router.query;
+  const { folderId, entryId } = router.query;
   //#endregion
 
   //#region Breadcrumb text setup
@@ -30,7 +30,7 @@ const Breadcrumb = () => {
           break;
         case `/folder/${folderId}`:
           (async () => {
-            // Get folder by id
+            // Get folder by id.
             const response = await fetch(`/api/folder?folderId=${folderId}`);
 
             if (response.ok) {
@@ -43,12 +43,27 @@ const Breadcrumb = () => {
             }
           })();
           break;
+        case `/${entryId}`:
+          (async () => {
+            // Get entry by id.
+            const response = await fetch(`/api/entry?entryId=${entryId}`);
+
+            if (response.ok) {
+              // Nested destructure the entryName out of data.
+              const {
+                data: { entryName },
+              } = await response.json();
+
+              setBreadcrumbText(`Dashboard/ ${entryName}`);
+            }
+          })();
+          break;
         default:
           setBreadcrumbText("Unknown Page");
           break;
       }
     })(routePath);
-  }, [routePath, folderId]);
+  }, [routePath, folderId, entryId]);
   //#endregion
 
   return <StyledBreadcrumb>{breadcrumbText}</StyledBreadcrumb>;
