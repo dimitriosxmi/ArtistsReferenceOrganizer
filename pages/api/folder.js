@@ -42,6 +42,21 @@ const handler = async (request, response) => {
       return;
     }
   }
+
+  // DELETE a folder by id.
+  if (request.method === "DELETE" && folderId) {
+    try {
+      await Folder.findByIdAndDelete(folderId);
+
+      response.status(200).json({ status: "Success delete folder by id!" });
+    } catch (error) {
+      console.log(error);
+
+      response
+        .status(400)
+        .json({ status: "Failure delete folder by id!", error: error.message });
+    }
+  }
 };
 
 export default handler;
