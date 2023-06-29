@@ -42,6 +42,22 @@ const handler = async (request, response) => {
       return;
     }
   }
+
+  // Delete an entry by id.
+  if (request.method === "DELETE" && entryId) {
+    try {
+      await Entry.findByIdAndDelete(entryId);
+
+      response.status(200).json({ status: "Success delete entry by id!" });
+    } catch (error) {
+      consolee.log(error);
+
+      response
+        .status(400)
+        .json({ status: "Failure delete entry by id!", error: error.message });
+      return;
+    }
+  }
 };
 
 export default handler;
