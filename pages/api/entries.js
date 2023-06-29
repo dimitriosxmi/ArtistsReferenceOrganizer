@@ -66,6 +66,27 @@ const handler = async (request, response) => {
       return;
     }
   }
+
+  // Update (remove entrySelectedFolder field) on all entries by folder id.
+  if (request.method === "PUT" && selectedFolderId) {
+    try {
+      await Entry.updateMany(
+        { entrySelectedFolder: selectedFolderId },
+        { $unset: { entrySelectedFolder: "" } }
+      );
+
+      response.status(200).json({ status: "Success put provided entries!" });
+      return;
+    } catch (error) {
+      console.log(error);
+
+      response.status(400).json({
+        status: "Failure put provided entries!",
+        error: error.message,
+      });
+      return;
+    }
+  }
 };
 
 export default handler;
