@@ -2,9 +2,13 @@ import styled from "styled-components";
 // Hooks
 import { useRouter } from "next/router";
 
-const DeleteRequest = ({ text, setIsRequestingDelete, deleteAPIUrl }) => {
+const DeleteRequest = ({
+  text,
+  setIsRequestingDelete,
+  deleteAPIUrl,
+  folderId,
+}) => {
   const router = useRouter();
-  const { folderId } = router.query;
 
   return (
     <>
@@ -19,11 +23,33 @@ const DeleteRequest = ({ text, setIsRequestingDelete, deleteAPIUrl }) => {
           </StyledButton>
         </StyledButtonContainer>
       </StyledDeleteRequestBox>
-      <StyledSideBarBackground onClick={() => handleOnClickCancel()} />
+      <StyledBackground onClick={() => handleOnClickCancel()} />
     </>
   );
 
+  // If folder id isn't provided, than just delete
   async function handleOnClickDelete() {
+    folderId ? await handleUpdateRelatedEntries() : handleDeleteFolder();
+  }
+
+  async function handleUpdateRelatedEntries() {
+    // PUT update entries.
+    // (Triggers functionality on api end that deletes
+    // entrySelectedFolder property from a selection of entries).
+    const postResponse = await fetch(
+      `/api/entries?selectedFolderId=${folderId}`,
+      {
+        method: "PUT",
+      }
+    );
+
+    if (postResponse.ok) {
+      handleDeleteFolder();
+    }
+  }
+
+  async function handleDeleteFolder() {
+    // Delete entry or folder. (depends on the provided api url)
     const response = await fetch(deleteAPIUrl, {
       method: "DELETE",
     });
@@ -33,6 +59,7 @@ const DeleteRequest = ({ text, setIsRequestingDelete, deleteAPIUrl }) => {
     }
   }
 
+  // Close delete request window.
   function handleOnClickCancel() {
     setIsRequestingDelete(false);
   }
@@ -78,7 +105,7 @@ const StyledButton = styled.button`
   border-radius: 10px;
 `;
 
-const StyledSideBarBackground = styled.div`
+const StyledBackground = styled.div`
   z-index: 200;
   position: fixed;
   left: 0;

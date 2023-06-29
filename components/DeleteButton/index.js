@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 // Components
 import DeleteRequest from "../DeleteRequest";
 
-const DeleteButton = ({ text, deleteAPIUrl }) => {
+const DeleteButton = ({ text, deleteAPIUrl, folderId }) => {
   const [isRequestingDelete, setIsRequestingDelete] = useState(false);
 
   return (
@@ -22,6 +22,7 @@ const DeleteButton = ({ text, deleteAPIUrl }) => {
           text={text.toLowerCase()}
           setIsRequestingDelete={setIsRequestingDelete}
           deleteAPIUrl={deleteAPIUrl}
+          folderId={folderId ? folderId : null}
         />
       ) : null}
     </>

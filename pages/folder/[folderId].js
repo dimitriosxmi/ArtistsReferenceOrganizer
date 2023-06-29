@@ -1,6 +1,5 @@
 // Hooks
 import { useRouter } from "next/router";
-
 // Components
 import CommonHeaderLayout from "../../components/CommonHeaderLayout";
 import BackButton from "../../components/BackButton/BackButton.js";
@@ -22,6 +21,7 @@ const FolderView = ({ sideBarOpen, setSideBarOpen }) => {
       <DeleteButton
         text={"Folder"}
         deleteAPIUrl={`/api/folder?folderId=${folderId}`}
+        folderId={folderId}
       />
       <NewEntryButton folderId={folderId} />
       <EntryPreviewList folderId={folderId} />
