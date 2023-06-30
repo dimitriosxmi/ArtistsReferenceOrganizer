@@ -9,7 +9,7 @@ const handler = async (request, response) => {
   // Get an entry by id.
   if (request.method === "GET") {
     try {
-      const entry = await Entry.findById(entryId);
+      const entry = await Entry.findById(entryId).populate("entryTags");
 
       response
         .status(201)
