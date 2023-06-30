@@ -90,7 +90,6 @@ const NewEntryForm = () => {
           />
         </StyledTagsArea>
       </StyledSection>
-      <br style={{ marginBottom: "100px" }} />
       <StyledSubmitButton>
         <StyledPlusIcon />
       </StyledSubmitButton>
@@ -235,7 +234,7 @@ const StyledTextArea = styled.textarea`
 `;
 
 const StyledSection = styled.section`
-  margin: 20px 0 0 5%;
+  margin: 20px 0 100px 5%;
   padding: 0 0 20px 0;
   border: 2px solid #223;
   width: 90%;
