@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import "./Tag";
 
 const { Schema } = mongoose;
 

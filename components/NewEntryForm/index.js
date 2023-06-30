@@ -24,7 +24,7 @@ const NewEntryForm = () => {
 
   return (
     <form onSubmit={handleOnSubmit}>
-      {/* Entry name input */}
+      {/* Entry name input. */}
       <StyledInput
         type="text"
         name="entryName"
@@ -32,14 +32,14 @@ const NewEntryForm = () => {
         required
         autoFocus
       />
-      {/* Entry reference link input */}
+      {/* Entry reference link input. */}
       <StyledLabel htmlFor="entryReferenceLink">Refrence a Link:</StyledLabel>
       <StyledTextArea
         id="entryReferenceLink"
         name="entryReferenceLink"
         rows={3}
       />
-      {/* Entry description input */}
+      {/* Entry description input. */}
       <StyledSection>
         <StyledSectionHeader>Description</StyledSectionHeader>
         <StyledTextArea
@@ -48,10 +48,10 @@ const NewEntryForm = () => {
           rows={3}
         />
       </StyledSection>
-      {/* Entry tags */}
+      {/* Entry tags. */}
       <StyledSection>
         <StyledSectionHeader>Tags</StyledSectionHeader>
-        {/* Display available tags list */}
+        {/* Display available tags list. */}
         <StyledTagSelection>
           <StyledText>Use Tag:</StyledText>
           {tags.map((tag) => (
@@ -73,7 +73,7 @@ const NewEntryForm = () => {
             </StyledTagCard>
           ))}
         </StyledTagSelection>
-        {/* Create new Tag form */}
+        {/* Create new tags. */}
         <StyledTagsArea>
           <StyledText>New Tag:</StyledText>
           <StyledTagInput
@@ -99,23 +99,29 @@ const NewEntryForm = () => {
 
   // GET all tags and apply them to the 'tags' state variable.
   async function updateTagsList() {
+    // GET all tags from database.
     const response = await fetch(`/api/tags`);
 
     if (response.ok) {
+      // Unpack data and apply to 'tags' state variable.
       const { data } = await response.json();
       setTags(data);
     }
   }
 
-  // DELETE a tag and remove it from t
+  // DELETE tag from database and Toggle OFF selection.
   async function handleOnClickDeleteTag(tag) {
+    // DELETE tag from database.
     const response = await fetch(`/api/tag?tagId=${tag._id}`, {
       method: "DELETE",
     });
 
     if (response.ok) {
+      // GET update all tags list.
       await updateTagsList();
+      // If Toggled ON Tag.
       if (selectedTags.includes(tag)) {
+        // Toggle OFF Tag (Remove).
         const selectedTagsCopy = [...selectedTags];
         const index = selectedTagsCopy.indexOf(tag);
         selectedTagsCopy.splice(index, 1);
@@ -125,14 +131,14 @@ const NewEntryForm = () => {
     }
   }
 
-  // Toggle tag between selected/ unselected
+  // Toggle tag between selected/ unselected.
   function handleOnClickTag(tag) {
     if (tags.includes(tag)) {
-      // Add Tag
+      // Toggle ON Tag (Add).
       if (!selectedTags.includes(tag)) {
         setSelectedTags([...selectedTags, tag]);
       }
-      // Remove Tag
+      // Toggle OFF Tag (Remove).
       else if (selectedTags.includes(tag)) {
         const selectedTagsCopy = [...selectedTags];
         const index = selectedTagsCopy.indexOf(tag);
@@ -148,6 +154,7 @@ const NewEntryForm = () => {
     const inputValue = tagInputElement.current.value;
 
     if (inputValue.length > 0) {
+      // POST inputValue as tag to database.
       const postResponse = await fetch(`/api/tag`, {
         method: "POST",
         headers: {
@@ -157,6 +164,7 @@ const NewEntryForm = () => {
       });
 
       if (postResponse.ok) {
+        // GET update all tags list.
         await updateTagsList();
       }
     }
@@ -189,6 +197,7 @@ const NewEntryForm = () => {
     });
 
     if (response.ok) {
+      // If folderId was provided, route back to corresponding folder.
       if (folderId) {
         router.push(`/folder/${folderId}`);
         return;
