@@ -17,9 +17,7 @@ const entrySchema = new Schema(
     entryDescription: {
       type: String,
     },
-    entryTags: {
-      type: [String],
-    },
+    entryTags: { type: [Schema.Types.ObjectId], ref: "Tag" },
     entrySelectedFolder: {
       type: String,
     },
