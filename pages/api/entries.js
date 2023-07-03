@@ -11,7 +11,8 @@ const handler = async (request, response) => {
     try {
       const entries = await Entry.find({})
         .sort({ entryUploadDate: -1 })
-        .limit(recentEntriesAmount);
+        .limit(recentEntriesAmount)
+        .populate("entryTags");
 
       response
         .status(200)

@@ -72,8 +72,13 @@ const Breadcrumb = () => {
 export default Breadcrumb;
 
 const StyledBreadcrumb = styled.p`
-  text-align: center;
+  max-width: 100%;
+  padding: 5px;
   border-top: 2px solid #223;
   border-bottom: 2px solid #223;
-  padding: 5px;
+  text-align: center;
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;

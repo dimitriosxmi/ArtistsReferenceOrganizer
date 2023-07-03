@@ -29,7 +29,13 @@ const EntryDetails = () => {
 export default EntryDetails;
 
 const StyledHeadline = styled.p`
-  margin: 10px 0 0 0;
-  font-size: 2.5rem;
+  max-width: 90%;
+  margin: 10px 0 0 5%;
+  padding: 5px;
+  font-size: 2rem;
   text-align: center;
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
