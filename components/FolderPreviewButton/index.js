@@ -37,5 +37,9 @@ const StyledParagraphText = styled.p`
   font-weight: 600;
   position: relative;
   bottom: 5%;
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 `;
 //#endregion

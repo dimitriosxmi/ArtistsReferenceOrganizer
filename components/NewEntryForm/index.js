@@ -90,6 +90,7 @@ const NewEntryForm = () => {
           />
         </StyledTagsArea>
       </StyledSection>
+      <ExtraSpace />
       <StyledSubmitButton>
         <StyledPlusIcon />
       </StyledSubmitButton>
@@ -165,6 +166,8 @@ const NewEntryForm = () => {
       if (postResponse.ok) {
         // GET update all tags list.
         await updateTagsList();
+        tagInputElement.current.value = "";
+        tagInputElement.current.focus();
       }
     }
   }
@@ -234,9 +237,14 @@ const StyledTextArea = styled.textarea`
 `;
 
 const StyledSection = styled.section`
-  margin: 20px 0 100px 5%;
+  margin: 20px 0 0 5%;
   padding: 0 0 20px 0;
   border: 2px solid #223;
+  width: 90%;
+`;
+
+const ExtraSpace = styled.section`
+  margin-bottom: 100px;
   width: 90%;
 `;
 
