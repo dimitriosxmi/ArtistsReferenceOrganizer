@@ -11,16 +11,22 @@ const NewEntryForm = () => {
 
   const [selectedTags, setSelectedTags] = useState([]);
   const [tags, setTags] = useState();
+  const [toggleDropdown, setToggleDropdown] = useState(false);
+  const [folders, setFolders] = useState([]);
+  const [dropdownSelection, setDropdownSelection] = useState({
+    folderName: "-- Select A Folder --",
+  });
   const tagInputElement = useRef();
 
   // GET's the tags list from database.
   useEffect(() => {
     (async () => {
       await updateTagsList();
+      await updateFoldersList();
     })();
   }, []);
 
-  if (!tags) return;
+  if (!tags) return <p>Loading..</p>;
 
   return (
     <form onSubmit={handleOnSubmit}>
@@ -35,10 +41,49 @@ const NewEntryForm = () => {
       {/* Entry reference link input. */}
       <StyledLabel htmlFor="entryReferenceLink">Refrence a Link:</StyledLabel>
       <StyledTextArea
+        type="url"
         id="entryReferenceLink"
         name="entryReferenceLink"
         rows={3}
       />
+      {/* Entry Folder Selection */}
+      <StyledSection>
+        <StyledSectionHeader>Folder Selection</StyledSectionHeader>
+        <StyledDropdownButton
+          id="entrySelectedFolder"
+          name="entrySelectedFolder"
+          type="button"
+          value={`🔽${dropdownSelection.folderName}`}
+          onClick={handleOnClickDropdown}
+        />
+        {/* Toggles on click of the dropdown Button */}
+        {toggleDropdown ? (
+          <StyledDropdown>
+            {/* Default no folder selection button */}
+            <StyledDropdownListing
+              type="button"
+              onClick={() =>
+                handleOnClickFolderSelect({
+                  folderName: "-- Select A Folder --",
+                })
+              }
+              style={{ filter: "brightness(75%)" }}
+            >
+              -- NO FOLDER --
+            </StyledDropdownListing>
+            {/* List of all folders as buttons */}
+            {folders.map((folder) => (
+              <StyledDropdownListing
+                key={folder._id}
+                type="button"
+                onClick={() => handleOnClickFolderSelect(folder)}
+              >
+                {folder.folderName}
+              </StyledDropdownListing>
+            ))}
+          </StyledDropdown>
+        ) : null}
+      </StyledSection>
       {/* Entry description input. */}
       <StyledSection>
         <StyledSectionHeader>Description</StyledSectionHeader>
@@ -107,6 +152,29 @@ const NewEntryForm = () => {
       const { data } = await response.json();
       setTags(data);
     }
+  }
+
+  // GET all folders and apply them to the 'folders' state variable.
+  async function updateFoldersList() {
+    // GET all folders from database.
+    const response = await fetch("/api/folders");
+
+    if (response.ok) {
+      // Unpack data and apply to 'folders' state variable.
+      const { data } = await response.json();
+      setFolders(data);
+    }
+  }
+
+  // Toggle Dropdown window
+  function handleOnClickDropdown() {
+    setToggleDropdown(!toggleDropdown);
+  }
+
+  // Save dropdown selection
+  function handleOnClickFolderSelect(folder) {
+    setDropdownSelection(folder);
+    handleOnClickDropdown();
   }
 
   // DELETE tag from database and Toggle OFF selection.
@@ -180,6 +248,13 @@ const NewEntryForm = () => {
     // Apply to entry the current new Date as timestamp.
     data.entryUploadDate = new Date().valueOf();
 
+    // When you selected folder in dropdown
+    // Apply the selection to the entry
+    dropdownSelection &&
+    !dropdownSelection.folderName.includes("-- Select A Folder --")
+      ? (data.entrySelectedFolder = dropdownSelection._id)
+      : null;
+
     // Apply to entry the selectedTags.
     data.entryTags = selectedTags;
 
@@ -241,6 +316,49 @@ const StyledSection = styled.section`
   padding: 0 0 20px 0;
   border: 2px solid #223;
   width: 90%;
+`;
+
+const StyledDropdownButton = styled.input`
+  margin: 0 0 0 5%;
+  padding: 0.5rem;
+  border: 2px solid #448;
+  border-radius: 10px;
+  width: 90%;
+  font-size: 1rem;
+  background-color: #40cc90;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
+
+const StyledDropdown = styled.div`
+  margin: 0 0 0 5%;
+  padding: 5px;
+  width: 90%;
+  border: 2px solid #223;
+  border-radius: 10px;
+`;
+
+const StyledDropdownListing = styled.button`
+  padding: 0 0.5rem;
+  width: 100%;
+  height: 30px;
+  font-size: 1rem;
+  border: 1px solid #448;
+  border-radius: 10px;
+  background-color: #6fa;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  &:hover {
+    box-shadow: 0 0 10px 5px #40cc90;
+    filter: brightness(120%);
+  }
+
+  &:active {
+    filter: brightness(90%);
+  }
 `;
 
 const ExtraSpace = styled.section`
