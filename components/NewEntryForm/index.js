@@ -18,7 +18,7 @@ const NewEntryForm = () => {
   });
   const tagInputElement = useRef();
 
-  // GET's the tags list from database.
+  // GET's the tags and folders list from database.
   useEffect(() => {
     (async () => {
       await updateTagsList();
@@ -102,7 +102,7 @@ const NewEntryForm = () => {
           {tags.map((tag) => (
             <StyledTagCard
               key={tag._id}
-              isSelected={selectedTags.includes(tag)}
+              isSelected={selectedTags.find((_tag) => _tag._id === tag._id)}
             >
               <StyledDeleteCardButton
                 type="button"
@@ -113,7 +113,7 @@ const NewEntryForm = () => {
                 type="button"
                 value={tag.tagName}
                 onClick={() => handleOnClickTag(tag)}
-                isSelected={selectedTags.includes(tag)}
+                isSelected={selectedTags.find((_tag) => _tag._id === tag._id)}
               />
             </StyledTagCard>
           ))}
@@ -382,7 +382,7 @@ const StyledTagSelection = styled.div`
 `;
 
 const StyledTagCard = styled.div`
-  margin: 0 0.25rem;
+  margin: 0.125rem 0.25rem;
   padding: 0;
   border: 2px dashed #448;
   border-radius: 10px;
