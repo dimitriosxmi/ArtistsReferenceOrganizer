@@ -3,14 +3,16 @@ import styled from "styled-components";
 import { useRouter } from "next/router";
 import { useState, useEffect, useRef } from "react";
 // SVGs
-import { PlusIcon } from "../svgs";
+import { PlusIcon, PenIcon } from "../svgs";
 
-const EntryForm = () => {
+const EntryForm = ({ editEntryData, toggleEditMode }) => {
   const router = useRouter();
   const { folderId } = router.query;
 
-  const [selectedTags, setSelectedTags] = useState([]);
-  const [tags, setTags] = useState();
+  const [selectedTags, setSelectedTags] = useState(
+    editEntryData?.entryTags ? editEntryData.entryTags : []
+  );
+  const [tags, setTags] = useState([]);
   const [toggleDropdown, setToggleDropdown] = useState(false);
   const [folders, setFolders] = useState([]);
   const [dropdownSelection, setDropdownSelection] = useState({
@@ -37,6 +39,7 @@ const EntryForm = () => {
         placeholder="Enter here your entry name."
         required
         autoFocus
+        defaultValue={editEntryData ? editEntryData.entryName : ""}
       />
       {/* Entry reference link input. */}
       <StyledLabel htmlFor="entryReferenceLink">Refrence a Link:</StyledLabel>
@@ -45,6 +48,7 @@ const EntryForm = () => {
         id="entryReferenceLink"
         name="entryReferenceLink"
         rows={3}
+        defaultValue={editEntryData ? editEntryData.entryReferenceLink : ""}
       />
       {/* Entry Folder Selection */}
       <StyledSection>
@@ -53,7 +57,7 @@ const EntryForm = () => {
           id="entrySelectedFolder"
           name="entrySelectedFolder"
           type="button"
-          value={`🔽${dropdownSelection.folderName}`}
+          defaultValue={`${dropdownSelection.folderName}`}
           onClick={handleOnClickDropdown}
         />
         {/* Toggles on click of the dropdown Button */}
@@ -91,6 +95,7 @@ const EntryForm = () => {
           id="entryDescription"
           name="entryDescription"
           rows={3}
+          defaultValue={editEntryData ? editEntryData.entryDescription : ""}
         />
       </StyledSection>
       {/* Entry tags. */}
@@ -136,8 +141,8 @@ const EntryForm = () => {
         </StyledTagsArea>
       </StyledSection>
       <ExtraSpace />
-      <StyledSubmitButton>
-        <StyledPlusIcon />
+      <StyledSubmitButton editMode={editEntryData ? true : false}>
+        {editEntryData ? <StyledPenIcon /> : <StyledPlusIcon />}
       </StyledSubmitButton>
     </form>
   );
@@ -163,6 +168,18 @@ const EntryForm = () => {
       // Unpack data and apply to 'folders' state variable.
       const { data } = await response.json();
       setFolders(data);
+
+      // When edit mode is toggled ON
+      // and the entry data has a selected folder
+      // pass it into the form.
+      if (editEntryData?.entrySelectedFolder) {
+        const selectedFolder = data.find(
+          (folder) => folder._id === editEntryData.entrySelectedFolder
+        );
+        if (selectedFolder) {
+          setDropdownSelection(selectedFolder);
+        }
+      }
     }
   }
 
@@ -201,19 +218,22 @@ const EntryForm = () => {
 
   // Toggle tag between selected/ unselected.
   function handleOnClickTag(tag) {
-    if (tags.includes(tag)) {
-      // Toggle ON Tag (Add).
-      if (!selectedTags.includes(tag)) {
-        setSelectedTags([...selectedTags, tag]);
-      }
-      // Toggle OFF Tag (Remove).
-      else if (selectedTags.includes(tag)) {
-        const selectedTagsCopy = [...selectedTags];
-        const index = selectedTagsCopy.indexOf(tag);
-        selectedTagsCopy.splice(index, 1);
+    // Toggle ON Tag (Add).
+    if (!selectedTags.find((_selectedTag) => _selectedTag._id === tag._id)) {
+      setSelectedTags([...selectedTags, tag]);
+    }
+    // Toggle OFF Tag (Remove).
+    else if (
+      selectedTags.find((_selectedTag) => _selectedTag._id === tag._id)
+    ) {
+      const selectedTagsCopy = [...selectedTags];
+      const equivalentTag = selectedTagsCopy.find(
+        (_tag) => _tag._id === tag._id
+      );
+      const index = selectedTagsCopy.indexOf(equivalentTag);
+      selectedTagsCopy.splice(index, 1);
 
-        setSelectedTags([...selectedTagsCopy]);
-      }
+      setSelectedTags([...selectedTagsCopy]);
     }
   }
 
@@ -264,22 +284,39 @@ const EntryForm = () => {
       ? (data.entrySelectedFolder = folderId)
       : null;
 
-    // POST the entry.
-    const response = await fetch("/api/entry", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
+    if (editEntryData) {
+      // PATCH the edited entry.
+      const response = await fetch(`/api/entry?entryId=${editEntryData._id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
 
-    if (response.ok) {
-      // If folderId was provided, route back to corresponding folder.
-      if (folderId) {
-        router.push(`/folder/${folderId}`);
-        return;
+      if (response.ok) {
+        if (toggleEditMode) {
+          toggleEditMode();
+        }
       }
-      router.push("/");
+    } else {
+      // POST the entry.
+      const response = await fetch("/api/entry", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (response.ok) {
+        // If folderId was provided, route back to corresponding folder.
+        if (folderId) {
+          router.push(`/folder/${folderId}`);
+          return;
+        }
+        router.push("/");
+      }
     }
   }
 };
@@ -460,6 +497,11 @@ const StyledPlusIcon = styled(PlusIcon)`
   width: 100%;
 `;
 
+const StyledPenIcon = styled(PenIcon)`
+  height: 100%;
+  width: 100%;
+`;
+
 const StyledSubmitButton = styled.button`
   position: fixed;
   bottom: 0;
@@ -468,6 +510,6 @@ const StyledSubmitButton = styled.button`
   margin: 30px 0 30px 5%;
   border: 2px solid #223;
   border-radius: 10px;
-  background: #40cc90;
+  background: ${({ editMode }) => (editMode ? "#4090cc" : "#40cc90")};
 `;
 //#endregion

@@ -4,13 +4,22 @@ import { useRouter } from "next/router";
 // SVGs
 import { ArrowLeftLong } from "../svgs";
 
-const BackButton = () => {
+const BackButton = ({ editMode, toggleEditMode }) => {
   const router = useRouter();
   return (
-    <StyledLink onClick={() => router.push(`/`)}>
+    <StyledLink onClick={() => handleOnClick()}>
       <StyledArrowLeftLong width={"2rem"} height={"2rem"} />
     </StyledLink>
   );
+
+  function handleOnClick() {
+    if (editMode) {
+      toggleEditMode();
+      return;
+    }
+
+    router.push(`/`);
+  }
 };
 
 export default BackButton;

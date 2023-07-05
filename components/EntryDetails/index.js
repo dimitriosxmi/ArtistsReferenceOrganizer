@@ -2,8 +2,11 @@ import styled from "styled-components";
 // Hooks
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
+// Components
+import EditEntryButton from "../EditEntryButton";
+import EntryForm from "../EntryForm";
 
-const EntryDetails = () => {
+const EntryDetails = ({ editMode, toggleEditMode }) => {
   const router = useRouter();
   const { entryId } = router.query;
   const [entryData, setEntryData] = useState();
@@ -19,7 +22,7 @@ const EntryDetails = () => {
         setEntryData(data);
       }
     })();
-  }, [entryId]);
+  }, [entryId, editMode]);
 
   if (!entryData) return <p>Loading..</p>;
 
@@ -28,25 +31,35 @@ const EntryDetails = () => {
 
   return (
     <>
-      {/* Name  */}
-      <StyledHeadline>{entryName}</StyledHeadline>
-      {/* Link */}
-      <StyledText bold>Link:</StyledText>
-      <StyledText borderBottom>{entryReferenceLink}</StyledText>
-      {/* Tags */}
-      <StyledTagContainer>
-        <StyledText noMargin bold>
-          Tags:
-        </StyledText>
-        {entryTags.map((tag) => (
-          <StyledTagCard key={tag._id}>{tag.tagName}</StyledTagCard>
-        ))}
-      </StyledTagContainer>
-      {/* Description */}
-      <StyledText borderTop bold>
-        Description:
-      </StyledText>
-      <StyledText>{entryDescription}</StyledText>
+      {/* When editmode is toggled,
+          the entry details hide,
+          and the entry form shows */}
+      {!editMode ? (
+        <>
+          {/* Name  */}
+          <StyledHeadline>{entryName}</StyledHeadline>
+          {/* Link */}
+          <StyledText bold>Link:</StyledText>
+          <StyledText borderBottom>{entryReferenceLink}</StyledText>
+          {/* Tags */}
+          <StyledTagContainer>
+            <StyledText noMargin bold>
+              Tags:
+            </StyledText>
+            {entryTags.map((tag) => (
+              <StyledTagCard key={tag._id}>{tag.tagName}</StyledTagCard>
+            ))}
+          </StyledTagContainer>
+          {/* Description */}
+          <StyledText borderTop bold>
+            Description:
+          </StyledText>
+          <StyledText>{entryDescription}</StyledText>{" "}
+          <EditEntryButton toggleEditMode={toggleEditMode} />
+        </>
+      ) : (
+        <EntryForm editEntryData={entryData} toggleEditMode={toggleEditMode} />
+      )}
     </>
   );
 };
