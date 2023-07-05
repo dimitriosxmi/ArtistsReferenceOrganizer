@@ -5,7 +5,7 @@ import { useState, useEffect, useRef } from "react";
 // SVGs
 import { PlusIcon } from "../svgs";
 
-const NewEntryForm = () => {
+const EntryForm = () => {
   const router = useRouter();
   const { folderId } = router.query;
 
@@ -284,7 +284,7 @@ const NewEntryForm = () => {
   }
 };
 
-export default NewEntryForm;
+export default EntryForm;
 
 //#region Styled Objects
 const StyledInput = styled.input`
