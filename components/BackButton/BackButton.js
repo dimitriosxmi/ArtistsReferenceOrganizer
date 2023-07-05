@@ -7,7 +7,7 @@ import { ArrowLeftLong } from "../svgs";
 const BackButton = () => {
   const router = useRouter();
   return (
-    <StyledLink onClick={() => router.back()}>
+    <StyledLink onClick={() => router.push(`/`)}>
       <StyledArrowLeftLong width={"2rem"} height={"2rem"} />
     </StyledLink>
   );
