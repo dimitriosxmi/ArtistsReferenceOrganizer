@@ -58,6 +58,26 @@ const handler = async (request, response) => {
       return;
     }
   }
+
+  // Patch an entry by id.
+  if (request.method === "PATCH" && entryId) {
+    try {
+      const updatedEntryData = request.body;
+      await Entry.findOneAndUpdate(
+        { _id: entryId },
+        { $set: updatedEntryData }
+      );
+
+      response.status(200).json({ status: "Success patch entry by id!" });
+    } catch (error) {
+      consolee.log(error);
+
+      response
+        .status(400)
+        .json({ status: "Failure patch entry by id!", error: error.message });
+      return;
+    }
+  }
 };
 
 export default handler;
