@@ -5,3 +5,4 @@ export { default as FolderIcon } from "./FolderIcon.svg";
 export { default as PlusIcon } from "./PlusIcon.svg";
 export { default as EntryFileIcon } from "./EntryFileIcon.svg";
 export { default as PenIcon } from "./PenIcon.svg";
+export { default as ImageIcon } from "./ImageIcon.svg";
