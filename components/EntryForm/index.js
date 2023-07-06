@@ -265,8 +265,11 @@ const EntryForm = ({ editEntryData, toggleEditMode }) => {
     const formData = new FormData(event.target);
     const data = Object.fromEntries(formData);
 
-    // Apply to entry the current new Date as timestamp.
-    data.entryUploadDate = new Date().valueOf();
+    // IF edit mode, use the existing entryUploadData.
+    // Else use the current new Date as timestamp.
+    !editEntryData
+      ? (data.entryUploadDate = new Date().valueOf())
+      : (data.entryUploadDate = editEntryData.entryUploadDate);
 
     // When you selected folder in dropdown
     // Apply the selection to the entry
