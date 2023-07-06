@@ -33,7 +33,7 @@ const handler = async (request, response) => {
     try {
       const entries = await Entry.find({
         entrySelectedFolder: selectedFolderId,
-      });
+      }).populate("entryTags");
 
       response
         .status(200)
@@ -52,7 +52,7 @@ const handler = async (request, response) => {
   // Get all data.
   if (request.method === "GET") {
     try {
-      const entries = await Entry.find({});
+      const entries = await Entry.find({}).populate("entryTags");
 
       response
         .status(200)
