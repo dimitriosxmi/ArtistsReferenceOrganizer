@@ -54,7 +54,7 @@ const EntryDetails = ({ editMode, toggleEditMode }) => {
           <StyledText borderTop bold>
             Description:
           </StyledText>
-          <StyledText>{entryDescription}</StyledText>{" "}
+          <StyledText>{entryDescription}</StyledText>
           <EditEntryButton toggleEditMode={toggleEditMode} />
         </>
       ) : (
