@@ -18,7 +18,9 @@ const EntryPreview = ({ entryData }) => {
             {/* Expander Toggle button */}
             <StyledExpanderToggleButton onClick={handleOnClickExpanderToggle}>
               {toggleExpander ? (
-                <StyledCaretDownIcon isexpanded={toggleExpander} />
+                <StyledCaretDownIcon
+                  isexpanded={toggleExpander ? toggleExpander : null}
+                />
               ) : (
                 <StyledCaretRightIcon />
               )}
@@ -26,16 +28,14 @@ const EntryPreview = ({ entryData }) => {
             {/* Clickable area to open entry */}
             <StyledPreviewCardLink
               href={`/${entryId}`}
-              isexpanded={toggleExpander}
+              isexpanded={toggleExpander ? toggleExpander : null}
             >
               {/* Name */}
-              <StyledEntryName isexpanded={toggleExpander}>
-                {entryData.entryName}
-              </StyledEntryName>
+              <StyledEntryName>{entryData.entryName}</StyledEntryName>
               {/* Icon */}
-              <StyledImageIcon isexpanded={toggleExpander} />
+              <StyledImageIcon />
               {/* Tags */}
-              <StyledTagContainer isexpanded={toggleExpander}>
+              <StyledTagContainer>
                 {entryData.entryTags.map((tag) => (
                   <StyledTagCard key={tag._id}>{tag.tagName}</StyledTagCard>
                 ))}
@@ -48,28 +48,26 @@ const EntryPreview = ({ entryData }) => {
             {/* Expander Toggle button */}
             <StyledExpanderToggleButton onClick={handleOnClickExpanderToggle}>
               {toggleExpander ? (
-                <StyledCaretDownIcon isexpanded={toggleExpander} />
+                <StyledCaretDownIcon />
               ) : (
                 <StyledCaretRightIcon />
               )}
             </StyledExpanderToggleButton>
             {/* Name */}
-            <StyledEntryName isexpanded={toggleExpander}>
-              {entryData.entryName}
-            </StyledEntryName>
+            <StyledEntryName>{entryData.entryName}</StyledEntryName>
             {/* Clickable area to open entry */}
             <StyledPreviewCardLink
               href={`/${entryId}`}
-              isexpanded={toggleExpander}
+              isexpanded={toggleExpander ? toggleExpander : null}
             >
               {/* Icon */}
-              <StyledImageIcon isexpanded={toggleExpander} />
+              <StyledImageIcon />
               {/* Description */}
               <StyledEntryDescription>
                 {entryData.entryDescription}
               </StyledEntryDescription>
               {/* Tags */}
-              <StyledTagContainer isexpanded={toggleExpander}>
+              <StyledTagContainer>
                 {entryData.entryTags.map((tag) => (
                   <StyledTagCard key={tag._id}>{tag.tagName}</StyledTagCard>
                 ))}
