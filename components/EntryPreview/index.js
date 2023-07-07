@@ -1,45 +1,135 @@
 import styled from "styled-components";
 import Link from "next/link";
+// Hooks
+import { useState } from "react";
 // SVGs
-import { ImageIcon } from "../svgs";
+import { ImageIcon, CaretRightIcon, CaretDownIcon } from "../svgs";
 
 const EntryPreview = ({ entryData }) => {
   const { _id: entryId } = entryData;
+  const [toggleExpander, setToggleExpander] = useState(false);
 
   return (
-    <StyledEntryPreviewCard href={`/${entryId}`}>
-      <StyledEntryName>{entryData.entryName}</StyledEntryName>
-      <StyledImageIcon />
-      <StyledTagContainer>
-        {entryData.entryTags.map((tag) => (
-          <StyledTagCard key={tag._id}>{tag.tagName}</StyledTagCard>
-        ))}
-      </StyledTagContainer>
-    </StyledEntryPreviewCard>
+    <>
+      <StyledEntryPreviewCard isexpanded={toggleExpander}>
+        {!toggleExpander ? (
+          <>
+            <StyledExpanderToggleButton onClick={handleOnClickExpanderToggle}>
+              {toggleExpander ? (
+                <StyledCaretDownIcon isexpanded={toggleExpander} />
+              ) : (
+                <StyledCaretRightIcon />
+              )}
+            </StyledExpanderToggleButton>
+            <StyledPreviewCardLink
+              href={`/${entryId}`}
+              isexpanded={toggleExpander}
+            >
+              <StyledEntryName isexpanded={toggleExpander}>
+                {entryData.entryName}
+              </StyledEntryName>
+              <StyledImageIcon isexpanded={toggleExpander} />
+              <StyledTagContainer isexpanded={toggleExpander}>
+                {entryData.entryTags.map((tag) => (
+                  <StyledTagCard key={tag._id}>{tag.tagName}</StyledTagCard>
+                ))}
+              </StyledTagContainer>
+            </StyledPreviewCardLink>
+          </>
+        ) : (
+          <>
+            <StyledExpanderToggleButton onClick={handleOnClickExpanderToggle}>
+              {toggleExpander ? (
+                <StyledCaretDownIcon isexpanded={toggleExpander} />
+              ) : (
+                <StyledCaretRightIcon />
+              )}
+            </StyledExpanderToggleButton>
+            <StyledEntryName isexpanded={toggleExpander}>
+              {entryData.entryName}
+            </StyledEntryName>
+            <StyledPreviewCardLink
+              href={`/${entryId}`}
+              isexpanded={toggleExpander}
+            >
+              <StyledImageIcon isexpanded={toggleExpander} />
+              <StyledEntryDescription>
+                {entryData.entryDescription}
+              </StyledEntryDescription>
+              <StyledTagContainer isexpanded={toggleExpander}>
+                {entryData.entryTags.map((tag) => (
+                  <StyledTagCard key={tag._id}>{tag.tagName}</StyledTagCard>
+                ))}
+              </StyledTagContainer>
+            </StyledPreviewCardLink>
+          </>
+        )}
+      </StyledEntryPreviewCard>
+    </>
   );
+
+  function handleOnClickExpanderToggle() {
+    setToggleExpander(!toggleExpander);
+  }
 };
 
 export default EntryPreview;
 
 //#region Styled Objects
-const StyledEntryPreviewCard = styled(Link)`
+const StyledEntryPreviewCard = styled.div`
+  position: relative;
   width: 90%;
   height: 75px;
   margin: 5px 0 5px 5%;
-  padding: 0 0.5rem 0 0;
+  padding: 0 0.5rem 0 5px;
   display: grid;
-  grid-template-columns: 1fr 4fr;
+  grid-template-columns: 1fr 7fr;
+  grid-template-rows: 1fr 1fr;
+  grid-template-areas:
+    "caret cardLink"
+    "caret cardLink";
+  column-gap: 0.25rem;
+
+  border: 2px solid #223;
+  border-radius: 5px;
+  color: inherit;
+
+  ${({ isexpanded }) =>
+    isexpanded
+      ? `
+    height: 225px;
+    grid-template-columns: 1fr 3fr 4fr;
+    grid-template-rows: 1fr 6fr;
+    grid-template-areas:
+    "caret title title"
+    "cardLink cardLink cardLink";
+  `
+      : null}
+`;
+
+const StyledPreviewCardLink = styled(Link)`
+  grid-area: cardLink;
+  display: grid;
+  grid-template-columns: 2fr 6fr;
   grid-template-rows: 1fr 1fr;
   grid-template-areas:
     "icon title"
     "icon tags";
   column-gap: 0.25rem;
 
-  white-space: nowrap;
-  border: 2px solid #223;
-  border-radius: 5px;
   text-decoration: none;
   color: inherit;
+
+  ${({ isexpanded }) =>
+    isexpanded
+      ? `
+    grid-template-columns: 50% 50%;
+    grid-template-rows: 75% 25%;
+    grid-template-areas:
+    "icon description"
+    "tags tags";
+  `
+      : null}
 `;
 
 const StyledEntryName = styled.p`
@@ -49,11 +139,26 @@ const StyledEntryName = styled.p`
   font-size: 1.5rem;
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
+`;
+
+const StyledEntryDescription = styled.p`
+  grid-area: description;
+  max-height: 110px;
+  padding: 3px;
+  margin: 0;
+  word-wrap: break-word;
+
+  display: -webkit-box;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 `;
 
 const StyledImageIcon = styled(ImageIcon)`
   grid-area: icon;
   height: 100%;
+  max-height: 140px;
   width: 100%;
 `;
 
@@ -63,6 +168,7 @@ const StyledTagCard = styled.div`
   border: 1px solid #223;
   border-radius: 10px;
   font-size: 1rem;
+  white-space: nowrap;
 `;
 
 const StyledTagContainer = styled.div`
@@ -72,5 +178,26 @@ const StyledTagContainer = styled.div`
   justify-content: flex-start;
   align-items: center;
   overflow: hidden;
+`;
+
+const StyledExpanderToggleButton = styled.button`
+  grid-area: caret;
+  height: 100%;
+  width: 100%;
+  padding: 0;
+  background-color: transparent;
+  border: none;
+`;
+
+const StyledCaretRightIcon = styled(CaretRightIcon)`
+  position: relative;
+  right: 5px;
+  height: 100%;
+  width: 100%;
+`;
+
+const StyledCaretDownIcon = styled(CaretDownIcon)`
+  height: 50px;
+  width: 50px;
 `;
 //#endregion
