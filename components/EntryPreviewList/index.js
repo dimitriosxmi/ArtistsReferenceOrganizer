@@ -1,10 +1,22 @@
+import styled from "styled-components";
 // Hooks
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 // Components
 import EntryPreview from "../EntryPreview";
+import { setRequestMeta } from "next/dist/server/request-meta";
 
 const EntryPreviewList = ({ recentEntriesAmount, hasData, folderId }) => {
   const [entries, setEntries] = useState([]);
+  const [toggleFilterByDropdown, setToggleFilterByDropdown] = useState(false);
+  const searchInput = useRef("");
+
+  const dropdownOptions = [
+    "none",
+    "tag text",
+    "name",
+    "description",
+    "folder name",
+  ];
 
   //#region Get entries from database
   useEffect(() => {
@@ -56,9 +68,142 @@ const EntryPreviewList = ({ recentEntriesAmount, hasData, folderId }) => {
 
   if (!entries) return <p>Loading entries..</p>;
 
-  return entries.map((entryData) => {
-    return <EntryPreview key={entryData._id} entryData={entryData} />;
-  });
+  return (
+    <>
+      <StyledFormContainer>
+        <StyledInput
+          type="text"
+          id="searchInput"
+          name="searchInput"
+          ref={searchInput}
+          placeholder="Enter here your search text."
+        />
+        {/* Filter by dropdown button */}
+        <StyledButton
+          id="filterBy"
+          name="filterBy"
+          type="button"
+          defaultValue={`🔽none`}
+          onClick={handleOnClickFilterByDropdown}
+          filterby
+        />
+        <StyledButton
+          search
+          id="searchButton"
+          name="searchButton"
+          type="button"
+          defaultValue="🔍 Search"
+        />
+        {/* Toggles on click of the filterby dropdown Button */}
+        {toggleFilterByDropdown ? (
+          <StyledDropdown>
+            {
+              // FilterBy Dropdown Option: Default (No selection)
+              dropdownOptions.map((dropdownOption) => (
+                <StyledDropdownListing
+                  key={dropdownOption}
+                  id={dropdownOption}
+                  name={dropdownOption}
+                  type="button"
+                  onClick={() => handleOnClickFilterBySelection(dropdownOption)}
+                >
+                  {dropdownOption}
+                </StyledDropdownListing>
+              ))
+            }
+          </StyledDropdown>
+        ) : null}
+      </StyledFormContainer>
+      {entries.map((entryData) => {
+        return <EntryPreview key={entryData._id} entryData={entryData} />;
+      })}
+      ;
+    </>
+  );
+
+  // Toggle 'Filter By' dropdown window
+  function handleOnClickFilterByDropdown() {
+    setToggleFilterByDropdown(!toggleFilterByDropdown);
+  }
+
+  // Save 'Filter By' dropdown selection
+  function handleOnClickFilterBySelection() {
+    // setDropdownSelection();
+    handleOnClickFilterByDropdown();
+  }
 };
 
 export default EntryPreviewList;
+
+const StyledFormContainer = styled.div`
+  position: relative;
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  grid-template-rows: 1fr 1fr;
+  grid-template-areas:
+    "input input"
+    "filterBy search";
+  column-gap: 5%;
+  padding: 0 5% 0 5%;
+  margin: 0;
+`;
+
+const StyledInput = styled.input`
+  grid-area: input;
+  margin: 10px 0 10px 0;
+  border: 2px dashed #448;
+  width: 100%;
+  height: 2rem;
+  padding: 0.5rem;
+  text-overflow: ellipsis;
+  font-size: 1rem;
+`;
+
+const StyledButton = styled.input`
+  grid-area: ${({ filterby, search }) =>
+    filterby ? "filterBy" : search ? "search" : "none"};
+  margin: 0 0 10px 0;
+  padding: 0.5rem;
+  border: 2px solid #448;
+  border-radius: 10px;
+  font-size: 1rem;
+  background-color: ${({ filterby, search }) =>
+    filterby ? "#4090cc" : search ? "#40cc90" : "white"};
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+`;
+
+const StyledDropdown = styled.div`
+  position: absolute;
+  z-index: 1;
+  top: 100px;
+  margin: 0 0 0 5%;
+  padding: 5px;
+  width: 90%;
+  border: 2px solid #223;
+  border-radius: 10px;
+`;
+
+const StyledDropdownListing = styled.button`
+  margin: 0 0;
+  padding: 0 0.5rem;
+  width: 100%;
+  height: 30px;
+  font-size: 1rem;
+  border: 1px solid #448;
+  border-radius: 10px;
+  background-color: #6af;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  &:hover {
+    box-shadow: 0 0 10px 5px #4090cc;
+    filter: brightness(120%);
+  }
+
+  &:active {
+    filter: brightness(90%);
+  }
+`;
