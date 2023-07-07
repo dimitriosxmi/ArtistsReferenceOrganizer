@@ -13,7 +13,9 @@ const EntryPreview = ({ entryData }) => {
     <>
       <StyledEntryPreviewCard isexpanded={toggleExpander}>
         {!toggleExpander ? (
+          // Short preview
           <>
+            {/* Expander Toggle button */}
             <StyledExpanderToggleButton onClick={handleOnClickExpanderToggle}>
               {toggleExpander ? (
                 <StyledCaretDownIcon isexpanded={toggleExpander} />
@@ -21,14 +23,18 @@ const EntryPreview = ({ entryData }) => {
                 <StyledCaretRightIcon />
               )}
             </StyledExpanderToggleButton>
+            {/* Clickable area to open entry */}
             <StyledPreviewCardLink
               href={`/${entryId}`}
               isexpanded={toggleExpander}
             >
+              {/* Name */}
               <StyledEntryName isexpanded={toggleExpander}>
                 {entryData.entryName}
               </StyledEntryName>
+              {/* Icon */}
               <StyledImageIcon isexpanded={toggleExpander} />
+              {/* Tags */}
               <StyledTagContainer isexpanded={toggleExpander}>
                 {entryData.entryTags.map((tag) => (
                   <StyledTagCard key={tag._id}>{tag.tagName}</StyledTagCard>
@@ -37,7 +43,9 @@ const EntryPreview = ({ entryData }) => {
             </StyledPreviewCardLink>
           </>
         ) : (
+          // Expanded preview
           <>
+            {/* Expander Toggle button */}
             <StyledExpanderToggleButton onClick={handleOnClickExpanderToggle}>
               {toggleExpander ? (
                 <StyledCaretDownIcon isexpanded={toggleExpander} />
@@ -45,17 +53,22 @@ const EntryPreview = ({ entryData }) => {
                 <StyledCaretRightIcon />
               )}
             </StyledExpanderToggleButton>
+            {/* Name */}
             <StyledEntryName isexpanded={toggleExpander}>
               {entryData.entryName}
             </StyledEntryName>
+            {/* Clickable area to open entry */}
             <StyledPreviewCardLink
               href={`/${entryId}`}
               isexpanded={toggleExpander}
             >
+              {/* Icon */}
               <StyledImageIcon isexpanded={toggleExpander} />
+              {/* Description */}
               <StyledEntryDescription>
                 {entryData.entryDescription}
               </StyledEntryDescription>
+              {/* Tags */}
               <StyledTagContainer isexpanded={toggleExpander}>
                 {entryData.entryTags.map((tag) => (
                   <StyledTagCard key={tag._id}>{tag.tagName}</StyledTagCard>
