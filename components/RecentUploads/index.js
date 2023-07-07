@@ -20,6 +20,7 @@ const RecentUploads = () => {
     <section>
       <StyledRecentUploadsText>{text}</StyledRecentUploadsText>
       <EntryPreviewList recentEntriesAmount={20} hasData={setData} />
+      <Space />
     </section>
   );
 };
@@ -33,4 +34,9 @@ const StyledRecentUploadsText = styled.p`
   width: 90%;
   margin-left: 5%;
   margin-top: 100px;
+`;
+
+const Space = styled.div`
+  // Add margin by px amount, if not provided the default is 150px.
+  margin-bottom: ${({ px }) => (px ? `${px}px` : `150px`)};
 `;
