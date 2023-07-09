@@ -152,8 +152,6 @@ const EntryPreviewList = ({
       // the equivalent selected filter property field in database,
       // AND written value in the search input.
       if (filterBy != "none") {
-        console.log(`${filterBy} : ${searchInput.current.value}`);
-
         const getResponse = await fetch(
           `/api/entries?filterBy=${filterBy}&searchText=${searchInput.current.value}`
         );
