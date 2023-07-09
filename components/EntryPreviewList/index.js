@@ -5,17 +5,23 @@ import { useState, useEffect, useRef } from "react";
 import EntryPreview from "../EntryPreview";
 import { setRequestMeta } from "next/dist/server/request-meta";
 
-const EntryPreviewList = ({ recentEntriesAmount, hasData, folderId }) => {
+const EntryPreviewList = ({
+  recentEntriesAmount,
+  hasData,
+  folderId,
+  hasFiltering,
+}) => {
   const [entries, setEntries] = useState([]);
   const [toggleFilterByDropdown, setToggleFilterByDropdown] = useState(false);
+  const [filterBy, setFilterBy] = useState("none");
   const searchInput = useRef("");
 
   const dropdownOptions = [
     "none",
-    "tag text",
     "name",
+    "tag_text",
+    "folder_name",
     "description",
-    "folder name",
   ];
 
   //#region Get entries from database
@@ -70,50 +76,55 @@ const EntryPreviewList = ({ recentEntriesAmount, hasData, folderId }) => {
 
   return (
     <>
-      <StyledFormContainer>
-        <StyledInput
-          type="text"
-          id="searchInput"
-          name="searchInput"
-          ref={searchInput}
-          placeholder="Enter here your search text."
-        />
-        {/* Filter by dropdown button */}
-        <StyledButton
-          id="filterBy"
-          name="filterBy"
-          type="button"
-          defaultValue={`🔽none`}
-          onClick={handleOnClickFilterByDropdown}
-          filterby
-        />
-        <StyledButton
-          search
-          id="searchButton"
-          name="searchButton"
-          type="button"
-          defaultValue="🔍 Search"
-        />
-        {/* Toggles on click of the filterby dropdown Button */}
-        {toggleFilterByDropdown ? (
-          <StyledDropdown>
-            {
-              // FilterBy Dropdown Option: Default (No selection)
-              dropdownOptions.map((dropdownOption) => (
-                <StyledDropdownListing
-                  key={dropdownOption}
-                  id={dropdownOption}
-                  name={dropdownOption}
-                  type="button"
-                  onClick={() => handleOnClickFilterBySelection(dropdownOption)}
-                >
-                  {dropdownOption}
-                </StyledDropdownListing>
-              ))
-            }
-          </StyledDropdown>
-        ) : null}
-      </StyledFormContainer>
+      {hasFiltering ? (
+        <StyledFormContainer>
+          <StyledInput
+            type="text"
+            id="searchInput"
+            name="searchInput"
+            ref={searchInput}
+            placeholder="Enter here your search text."
+          />
+          {/* Filter by dropdown button */}
+          <StyledButton
+            id="filterBy"
+            name="filterBy"
+            type="button"
+            value={`🔽${getFormattedDropdownOptionText(filterBy)}`}
+            onClick={handleOnClickFilterByDropdown}
+            filterby
+          />
+          <StyledButton
+            search
+            id="searchButton"
+            name="searchButton"
+            type="button"
+            defaultValue="🔍 Search"
+            onClick={handleOnClickSearch}
+          />
+          {/* Toggles on click of the filterby dropdown Button */}
+          {toggleFilterByDropdown ? (
+            <StyledDropdown>
+              {
+                // FilterBy dropdown options list
+                dropdownOptions.map((dropdownOption) => (
+                  <StyledDropdownListing
+                    key={dropdownOption}
+                    id={dropdownOption}
+                    name={dropdownOption}
+                    type="button"
+                    onClick={() =>
+                      handleOnClickFilterBySelection(dropdownOption)
+                    }
+                  >
+                    {getFormattedDropdownOptionText(dropdownOption)}
+                  </StyledDropdownListing>
+                ))
+              }
+            </StyledDropdown>
+          ) : null}
+        </StyledFormContainer>
+      ) : null}
       {entries.map((entryData) => {
         return <EntryPreview key={entryData._id} entryData={entryData} />;
       })}
@@ -127,9 +138,49 @@ const EntryPreviewList = ({ recentEntriesAmount, hasData, folderId }) => {
   }
 
   // Save 'Filter By' dropdown selection
-  function handleOnClickFilterBySelection() {
-    // setDropdownSelection();
+  function handleOnClickFilterBySelection(dropdownOption) {
+    setFilterBy(dropdownOption);
     handleOnClickFilterByDropdown();
+  }
+
+  async function handleOnClickSearch() {
+    try {
+      // Get filtered data by:
+      // the equivalent selected filter property field in database,
+      // AND written value in the search input.
+      if (filterBy != "none") {
+        console.log(`${filterBy} : ${searchInput.current.value}`);
+
+        const getResponse = await fetch(
+          `/api/entries?filterBy=${filterBy}&searchText=${searchInput.current.value}`
+        );
+        if (getResponse.ok) {
+          // Unpack data and apply to 'entries' state variable.
+          const { data } = await getResponse.json();
+          setEntries(data);
+        }
+      }
+      // Get all data when none is selected for filtering option.
+      else if (filterBy === "none") {
+        const response = await fetch("/api/entries");
+
+        if (response.ok) {
+          // Unpack data and apply to 'entries' state variable.
+          const { data } = await response.json();
+          setEntries(data);
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  // Formats the text display to capital first letter
+  // and with white spaces instead of underscores.
+  function getFormattedDropdownOptionText(stringValue) {
+    return stringValue
+      .replace(stringValue[0], stringValue[0].toUpperCase())
+      .replace("_", " ");
   }
 };
 
