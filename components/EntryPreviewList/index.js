@@ -127,6 +127,7 @@ const EntryPreviewList = ({
           ) : null}
         </StyledFormContainer>
       ) : null}
+      {/* Entry previews list */}
       {entries.map((entryData) => {
         return <EntryPreview key={entryData._id} entryData={entryData} />;
       })}

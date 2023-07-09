@@ -56,7 +56,7 @@ const handler = async (request, response) => {
       }
 
       response.status(200).json({
-        status: `Success ${filterBy}: ${searchText} entries!`,
+        status: `Success get ${filterBy}: ${searchText} entries!`,
         data: entries,
       });
       return;
@@ -65,7 +65,10 @@ const handler = async (request, response) => {
 
       response
         .status(400)
-        .json({ status: "Failure get all entries!", error: error.message });
+        .json({
+          status: `Failure get ${filterBy}: ${searchText} entries!`,
+          error: error.message,
+        });
       return;
     }
   }
