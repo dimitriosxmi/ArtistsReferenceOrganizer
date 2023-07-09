@@ -78,6 +78,7 @@ const EntryPreviewList = ({
     <>
       {hasFiltering ? (
         <StyledFormContainer>
+          {/* Search input */}
           <StyledInput
             type="text"
             id="searchInput"
@@ -94,6 +95,7 @@ const EntryPreviewList = ({
             onClick={handleOnClickFilterByDropdown}
             filterby
           />
+          {/* Search button */}
           <StyledButton
             search
             id="searchButton"
