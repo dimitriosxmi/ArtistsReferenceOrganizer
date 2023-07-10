@@ -66,6 +66,7 @@ const EntryDetails = ({ editMode, toggleEditMode }) => {
 
 export default EntryDetails;
 
+//#region Styled Objects
 const StyledHeadline = styled.p`
   max-width: 90%;
   margin: 10px 0 0 5%;
@@ -109,3 +110,4 @@ const StyledTagContainer = styled.div`
   width: 90%;
   padding-left: 5%;
 `;
+//#endregion
