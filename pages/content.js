@@ -13,7 +13,7 @@ const Content = ({ sideBarOpen, setSideBarOpen }) => {
         setSideBarOpen={setSideBarOpen}
       />
       <BackButton />
-      <EntryPreviewList />
+      <EntryPreviewList hasFiltering />
       <NewEntryButton />
       <Space />
     </>
