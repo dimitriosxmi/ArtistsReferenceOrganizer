@@ -14,14 +14,32 @@ const EntryPreviewList = ({
   const [entries, setEntries] = useState([]);
   const [toggleFilterByDropdown, setToggleFilterByDropdown] = useState(false);
   const [filterBy, setFilterBy] = useState("none");
+  const [toggleSortByDropdown, setToggleSortByDropdown] = useState(false);
+  const [sortBy, setSortBy] = useState("none");
   const searchInput = useRef("");
 
-  const dropdownOptions = [
+  const dropdownFilterByOptions = [
     "none",
     "name",
     "tag_text",
     "folder_name",
     "description",
+  ];
+
+  const dropdownSortByOptions = [
+    "none",
+    "name_A-Z",
+    "name_Z-A",
+    "name_size_>",
+    "name_size_<",
+    "tag_A-Z",
+    "tag_Z-A",
+    "tag_count_>",
+    "tag_count_<",
+    "description_A-Z",
+    "description_Z-A",
+    "description_size_>",
+    "description_size_<",
   ];
 
   //#region Get entries from database
@@ -91,25 +109,34 @@ const EntryPreviewList = ({
             id="filterBy"
             name="filterBy"
             type="button"
-            value={`🔽${getFormattedDropdownOptionText(filterBy)}`}
+            value={`🔽Filter: ${getFormattedDropdownOptionText(filterBy)}`}
             onClick={handleOnClickFilterByDropdown}
-            filterby
+            $filterBy
           />
           {/* Search button */}
           <StyledButton
-            search
+            $search
             id="searchButton"
             name="searchButton"
             type="button"
             defaultValue="🔍 Search"
             onClick={handleOnClickSearch}
           />
-          {/* Toggles on click of the filterby dropdown Button */}
+          {/* Sort by dropdown button */}
+          <StyledButton
+            id="sortBy"
+            name="sortBy"
+            type="button"
+            value={`🔽Sort: ${getFormattedDropdownOptionText(sortBy)}`}
+            onClick={handleOnClickSortByDropdown}
+            $sortBy
+          />
+          {/* Toggles on click of the filterBy dropdown Button */}
           {toggleFilterByDropdown ? (
             <StyledDropdown>
               {
                 // FilterBy dropdown options list
-                dropdownOptions.map((dropdownOption) => (
+                dropdownFilterByOptions.map((dropdownOption) => (
                   <StyledDropdownListing
                     key={dropdownOption}
                     id={dropdownOption}
@@ -118,6 +145,25 @@ const EntryPreviewList = ({
                     onClick={() =>
                       handleOnClickFilterBySelection(dropdownOption)
                     }
+                  >
+                    {getFormattedDropdownOptionText(dropdownOption)}
+                  </StyledDropdownListing>
+                ))
+              }
+            </StyledDropdown>
+          ) : null}
+          {/* Toggles on click of the sortBy dropdown Button */}
+          {toggleSortByDropdown ? (
+            <StyledDropdown>
+              {
+                // SortBy dropdown options list
+                dropdownSortByOptions.map((dropdownOption) => (
+                  <StyledDropdownListing
+                    key={dropdownOption}
+                    id={dropdownOption}
+                    name={dropdownOption}
+                    type="button"
+                    onClick={() => handleOnClickSortBySelection(dropdownOption)}
                   >
                     {getFormattedDropdownOptionText(dropdownOption)}
                   </StyledDropdownListing>
@@ -135,8 +181,11 @@ const EntryPreviewList = ({
     </>
   );
 
+  //#region FilterBy functions
   // Toggle 'Filter By' dropdown window
   function handleOnClickFilterByDropdown() {
+    if (!toggleFilterByDropdown)
+      toggleSortByDropdown ? setToggleSortByDropdown(false) : null;
     setToggleFilterByDropdown(!toggleFilterByDropdown);
   }
 
@@ -175,26 +224,247 @@ const EntryPreviewList = ({
       console.log(error);
     }
   }
+  //#endregion
+
+  //#region SortBy functions
+  // Toggle 'Sort By' dropdown window
+  function handleOnClickSortByDropdown() {
+    if (!toggleSortByDropdown)
+      toggleFilterByDropdown ? setToggleFilterByDropdown(false) : null;
+    setToggleSortByDropdown(!toggleSortByDropdown);
+  }
+
+  // Save 'Sort By' dropdown selection
+  function handleOnClickSortBySelection(dropdownOption) {
+    setSortBy(dropdownOption);
+
+    if (dropdownOption !== "none") {
+      // Lets check all value cases of the selected dropdownOption.
+      switch (dropdownOption) {
+        // Filter entries by alphabetical name order.
+        case "name_A-Z":
+          const sortedByNameAlphabetical = entries.slice().sort((a, b) => {
+            const nameA = a.entryName.toUpperCase();
+            const nameB = b.entryName.toUpperCase();
+            if (nameA < nameB) {
+              return -1;
+            } else if (nameA > nameB) {
+              return 1;
+            }
+            return 0;
+          });
+
+          setEntries(sortedByNameAlphabetical);
+          break;
+        // Filter entries by unalphabetical name order.
+        case "name_Z-A":
+          const sortedByNameUnalphabetical = entries.slice().sort((a, b) => {
+            const nameA = a.entryName.toUpperCase();
+            const nameB = b.entryName.toUpperCase();
+            if (nameA > nameB) {
+              return -1;
+            } else if (nameA < nameB) {
+              return 1;
+            }
+            return 0;
+          });
+
+          setEntries(sortedByNameUnalphabetical);
+          break;
+        // Filter entries by larger to smaller name.
+        case "name_size_>":
+          const sortedByNameLengthLarger = entries.slice().sort((a, b) => {
+            const nameLengthA = a.entryName.length;
+            const nameLengthB = b.entryName.length;
+            return nameLengthB - nameLengthA;
+          });
+
+          setEntries(sortedByNameLengthLarger);
+          break;
+        // Filter entries by smaller to larger name.
+        case "name_size_<":
+          const sortedByNameLengthSmaller = entries.slice().sort((a, b) => {
+            const nameLengthA = a.entryName.length;
+            const nameLengthB = b.entryName.length;
+            return nameLengthA - nameLengthB;
+          });
+
+          setEntries(sortedByNameLengthSmaller);
+          break;
+        // Filter entries by alphabetical tag order.
+        case "tag_A-Z":
+          const entriesWithTags = entries.slice().filter((entry) => {
+            return entry.entryTags.length > 0;
+          });
+          const entriesWithoutTags = entries.slice().filter((entry) => {
+            return entry.entryTags.length < 1;
+          });
+
+          const sortedByTagAlphabetical = entriesWithTags
+            .slice()
+            .sort((a, b) => {
+              const tagsA = a.entryTags.slice().sort((_a, _b) => {
+                const tagNameA = _a.tagName.toUpperCase();
+                const tagNameB = _b.tagName.toUpperCase();
+                return tagNameA < tagNameB ? -1 : tagNameA > tagNameB ? 1 : 0;
+              });
+              const tagsB = b.entryTags.slice().sort((_a, _b) => {
+                const tagNameA = _a.tagName.toUpperCase();
+                const tagNameB = _b.tagName.toUpperCase();
+                return tagNameA < tagNameB ? -1 : tagNameA > tagNameB ? 1 : 0;
+              });
+
+              if (tagsA[0]?.tagName < tagsB[0]?.tagName) {
+                return -1;
+              } else if (tagsA[0]?.tagName > tagsB[0]?.tagName) {
+                return 1;
+              }
+              return 0;
+            })
+            .concat(entriesWithoutTags);
+
+          setEntries(sortedByTagAlphabetical);
+          break;
+        // Filter entries by unalphabetical tag order.
+        case "tag_Z-A":
+          const _entriesWithTags = entries.slice().filter((entry) => {
+            return entry.entryTags.length > 0;
+          });
+          const _entriesWithoutTags = entries.slice().filter((entry) => {
+            return entry.entryTags.length < 1;
+          });
+
+          const sortedByTagUnalphabetical = _entriesWithTags
+            .slice()
+            .sort((a, b) => {
+              const tagsA = a.entryTags.slice().sort((_a, _b) => {
+                const tagNameA = _a.tagName.toUpperCase();
+                const tagNameB = _b.tagName.toUpperCase();
+                return tagNameA < tagNameB ? -1 : tagNameA > tagNameB ? 1 : 0;
+              });
+              const tagsB = b.entryTags.slice().sort((_a, _b) => {
+                const tagNameA = _a.tagName.toUpperCase();
+                const tagNameB = _b.tagName.toUpperCase();
+                return tagNameA < tagNameB ? -1 : tagNameA > tagNameB ? 1 : 0;
+              });
+
+              if (tagsA[0].tagName > tagsB[0].tagName) {
+                return -1;
+              } else if (tagsA[0].tagName < tagsB[0].tagName) {
+                return 1;
+              }
+              return 0;
+            })
+            .concat(_entriesWithoutTags);
+
+          setEntries(sortedByTagUnalphabetical);
+          break;
+        // Filter entries by most to least tags.
+        case "tag_count_>":
+          const sortedByTagCountLarger = entries.slice().sort((a, b) => {
+            const tagCountA = a.entryTags.length;
+            const tagCountB = b.entryTags.length;
+            return tagCountB - tagCountA;
+          });
+
+          setEntries(sortedByTagCountLarger);
+          break;
+        // Filter entries by least to most tags.
+        case "tag_count_<":
+          const sortedByTagCountSmaller = entries.slice().sort((a, b) => {
+            const tagCountA = a.entryTags.length;
+            const tagCountB = b.entryTags.length;
+            return tagCountA - tagCountB;
+          });
+
+          setEntries(sortedByTagCountSmaller);
+          break;
+        // Filter entries by alphabetical description order.
+        case "description_A-Z":
+          const sortedByDescriptionAlphabetical = entries
+            .slice()
+            .sort((a, b) => {
+              const descriptionA = a.entryDescription.toUpperCase();
+              const descriptionB = b.entryDescription.toUpperCase();
+              if (descriptionA < descriptionB) {
+                return -1;
+              } else if (descriptionA > descriptionB) {
+                return 1;
+              }
+              return 0;
+            });
+
+          setEntries(sortedByDescriptionAlphabetical);
+          break;
+        // Filter entries by unalphabetical description order.
+        case "description_Z-A":
+          const sortedByDescriptionUnalphabetical = entries
+            .slice()
+            .sort((a, b) => {
+              const descriptionA = a.entryDescription.toUpperCase();
+              const descriptionB = b.entryDescription.toUpperCase();
+              if (descriptionA > descriptionB) {
+                return -1;
+              } else if (descriptionA < descriptionB) {
+                return 1;
+              }
+              return 0;
+            });
+
+          setEntries(sortedByDescriptionUnalphabetical);
+          break;
+        // Filter entries by larger to smaller description.
+        case "description_size_>":
+          const sortedByDescriptionLengthLarger = entries
+            .slice()
+            .sort((a, b) => {
+              const descriptionLengthA = a.entryDescription.length;
+              const descriptionLengthB = b.entryDescription.length;
+              return descriptionLengthB - descriptionLengthA;
+            });
+
+          setEntries(sortedByDescriptionLengthLarger);
+          break;
+        // Filter entries by smaller to larger description.
+        case "description_size_<":
+          const sortedByDescriptionLengthSmaller = entries
+            .slice()
+            .sort((a, b) => {
+              const descriptionLengthA = a.entryDescription.length;
+              const descriptionLengthB = b.entryDescription.length;
+              return descriptionLengthA - descriptionLengthB;
+            });
+
+          setEntries(sortedByDescriptionLengthSmaller);
+          break;
+      }
+    }
+
+    handleOnClickSortByDropdown();
+  }
+  //#endregion
 
   // Formats the text display to capital first letter
   // and with white spaces instead of underscores.
   function getFormattedDropdownOptionText(stringValue) {
     return stringValue
       .replace(stringValue[0], stringValue[0].toUpperCase())
-      .replace("_", " ");
+      .replaceAll("_", " ");
   }
 };
 
 export default EntryPreviewList;
 
+//#region Styled Objects
 const StyledFormContainer = styled.div`
   position: relative;
   display: grid;
   grid-template-columns: 3fr 2fr;
-  grid-template-rows: 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
   grid-template-areas:
     "input input"
-    "filterBy search";
+    "filterBy search"
+    "sortBy sortBy";
   column-gap: 5%;
   padding: 0 5% 0 5%;
   margin: 0;
@@ -212,15 +482,15 @@ const StyledInput = styled.input`
 `;
 
 const StyledButton = styled.input`
-  grid-area: ${({ filterby, search }) =>
-    filterby ? "filterBy" : search ? "search" : "none"};
+  grid-area: ${({ $filterBy, $search, $sortBy }) =>
+    $filterBy ? "filterBy" : $search ? "search" : $sortBy ? "sortBy" : "none"};
   margin: 0 0 10px 0;
   padding: 0.5rem;
   border: 2px solid #448;
   border-radius: 10px;
   font-size: 1rem;
-  background-color: ${({ filterby, search }) =>
-    filterby ? "#4090cc" : search ? "#40cc90" : "white"};
+  background-color: ${({ $filterBy, $search, $sortBy }) =>
+    $filterBy || $sortBy ? "#4090cc" : $search ? "#40cc90" : "white"};
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -229,7 +499,7 @@ const StyledButton = styled.input`
 const StyledDropdown = styled.div`
   position: absolute;
   z-index: 1;
-  top: 100px;
+  top: 150px;
   margin: 0 0 0 5%;
   padding: 5px;
   width: 90%;
@@ -259,3 +529,4 @@ const StyledDropdownListing = styled.button`
     filter: brightness(90%);
   }
 `;
+//#endregion
