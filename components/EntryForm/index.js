@@ -1,7 +1,7 @@
 import styled from "styled-components";
 // Hooks
 import { useRouter } from "next/router";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, use } from "react";
 // SVGs
 import { PlusIcon, PenIcon } from "../svgs";
 
@@ -18,7 +18,10 @@ const EntryForm = ({ editEntryData, toggleEditMode }) => {
   const [dropdownSelection, setDropdownSelection] = useState({
     folderName: "-- Select A Folder --",
   });
+  const [selectedFile, setSelectedFile] = useState("");
+  const [selectedFileName, setSelectedFileName] = useState("");
   const tagInputElement = useRef();
+  const imageFileInputElement = useRef();
 
   // GET's the tags and folders list from database.
   useEffect(() => {
@@ -41,6 +44,29 @@ const EntryForm = ({ editEntryData, toggleEditMode }) => {
         autoFocus
         defaultValue={editEntryData ? editEntryData.entryName : ""}
       />
+      <StyledFileSelectLabel>
+        {/* Change Image Upload text
+            when file is selected. */}
+        {selectedFileName === ""
+          ? "Tap me to upload an Image"
+          : `Uploaded: ${selectedFileName}`}
+
+        <input
+          type="file"
+          accept="image/png, image/jpeg, image/jpg"
+          onChange={handleOnImageSelect}
+          ref={imageFileInputElement}
+        />
+      </StyledFileSelectLabel>
+      {selectedFile !== "" ? (
+        <StyledFileRemoveButtonContainer>
+          <StyledFileRemoveButton
+            type="button"
+            value="❌ Remove Image"
+            onClick={handleOnClickRemoveImage}
+          />
+        </StyledFileRemoveButtonContainer>
+      ) : null}
       {/* Entry reference link input. */}
       <StyledLabel htmlFor="entryReferenceLink">Refrence a Link:</StyledLabel>
       <StyledTextArea
@@ -181,6 +207,22 @@ const EntryForm = ({ editEntryData, toggleEditMode }) => {
         }
       }
     }
+  }
+
+  // Store the selected file name and file path.
+  function handleOnImageSelect(event) {
+    setSelectedFile(event.target.value);
+    // Take input value and clean up the path
+    // down to only the file name and type.
+    const file = event.target.value.replace(/.*[\/\\]/, "");
+    setSelectedFileName(file);
+    console.log(file);
+  }
+
+  // Remove selected file.
+  function handleOnClickRemoveImage() {
+    setSelectedFile("");
+    setSelectedFileName("");
   }
 
   // Toggle Dropdown window
@@ -334,6 +376,48 @@ const StyledInput = styled.input`
   height: 2rem;
   padding: 0.5rem;
   text-overflow: ellipsis;
+  font-size: 1rem;
+`;
+
+const StyledFileSelectLabel = styled.label`
+  width: 90%;
+  height: 180px;
+  margin: 0 0 10px 5%;
+  padding: 10%;
+  display: flex;
+  align-items: center;
+  border: 2px dashed #448;
+  background-color: white;
+  overflow: hidden;
+  word-break: break-word;
+
+  font-size: 1.5rem;
+  text-align: center;
+  cursor: pointer;
+
+  input[type="file"] {
+    display: none;
+  }
+
+  &:hover {
+    filter: brightness(90%);
+  }
+
+  &:active {
+    filter: brightness(70%);
+  }
+`;
+
+const StyledFileRemoveButtonContainer = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  margin: 20px 5% 0 0;
+`;
+
+const StyledFileRemoveButton = styled.input`
+  border-radius: 10px;
+  background: #faa;
+  border: 2px solid #223;
   font-size: 1rem;
 `;
 
