@@ -14,15 +14,19 @@ const EntryPreviewList = ({
   const [entries, setEntries] = useState([]);
   const [toggleFilterByDropdown, setToggleFilterByDropdown] = useState(false);
   const [filterBy, setFilterBy] = useState("none");
+  const [toggleSortByDropdown, setToggleSortByDropdown] = useState(false);
+  const [sortBy, setSortBy] = useState("none");
   const searchInput = useRef("");
 
-  const dropdownOptions = [
+  const dropdownFilterByOptions = [
     "none",
     "name",
     "tag_text",
     "folder_name",
     "description",
   ];
+
+  const dropdownSortByOptions = ["none", "name", "tag", "description_length"];
 
   //#region Get entries from database
   useEffect(() => {
@@ -91,25 +95,34 @@ const EntryPreviewList = ({
             id="filterBy"
             name="filterBy"
             type="button"
-            value={`🔽${getFormattedDropdownOptionText(filterBy)}`}
+            value={`🔽Filter: ${getFormattedDropdownOptionText(filterBy)}`}
             onClick={handleOnClickFilterByDropdown}
-            filterby
+            $filterBy
           />
           {/* Search button */}
           <StyledButton
-            search
+            $search
             id="searchButton"
             name="searchButton"
             type="button"
             defaultValue="🔍 Search"
             onClick={handleOnClickSearch}
           />
-          {/* Toggles on click of the filterby dropdown Button */}
+          {/* Sort by dropdown button */}
+          <StyledButton
+            id="sortBy"
+            name="sortBy"
+            type="button"
+            value={`🔽Sort: ${getFormattedDropdownOptionText(sortBy)}`}
+            onClick={handleOnClickSortByDropdown}
+            $sortBy
+          />
+          {/* Toggles on click of the filterBy dropdown Button */}
           {toggleFilterByDropdown ? (
             <StyledDropdown>
               {
                 // FilterBy dropdown options list
-                dropdownOptions.map((dropdownOption) => (
+                dropdownFilterByOptions.map((dropdownOption) => (
                   <StyledDropdownListing
                     key={dropdownOption}
                     id={dropdownOption}
@@ -118,6 +131,25 @@ const EntryPreviewList = ({
                     onClick={() =>
                       handleOnClickFilterBySelection(dropdownOption)
                     }
+                  >
+                    {getFormattedDropdownOptionText(dropdownOption)}
+                  </StyledDropdownListing>
+                ))
+              }
+            </StyledDropdown>
+          ) : null}
+          {/* Toggles on click of the sortBy dropdown Button */}
+          {toggleSortByDropdown ? (
+            <StyledDropdown>
+              {
+                // SortBy dropdown options list
+                dropdownSortByOptions.map((dropdownOption) => (
+                  <StyledDropdownListing
+                    key={dropdownOption}
+                    id={dropdownOption}
+                    name={dropdownOption}
+                    type="button"
+                    onClick={() => handleOnClickSortBySelection(dropdownOption)}
                   >
                     {getFormattedDropdownOptionText(dropdownOption)}
                   </StyledDropdownListing>
@@ -135,8 +167,11 @@ const EntryPreviewList = ({
     </>
   );
 
+  //#region FilterBy functions
   // Toggle 'Filter By' dropdown window
   function handleOnClickFilterByDropdown() {
+    if (!toggleFilterByDropdown)
+      toggleSortByDropdown ? setToggleSortByDropdown(false) : null;
     setToggleFilterByDropdown(!toggleFilterByDropdown);
   }
 
@@ -175,6 +210,22 @@ const EntryPreviewList = ({
       console.log(error);
     }
   }
+  //#endregion
+
+  //#region SortBy functions
+  // Toggle 'Sort By' dropdown window
+  function handleOnClickSortByDropdown() {
+    if (!toggleSortByDropdown)
+      toggleFilterByDropdown ? setToggleFilterByDropdown(false) : null;
+    setToggleSortByDropdown(!toggleSortByDropdown);
+  }
+
+  // Save 'Sort By' dropdown selection
+  function handleOnClickSortBySelection(dropdownOption) {
+    setSortBy(dropdownOption);
+    handleOnClickSortByDropdown();
+  }
+  //#endregion
 
   // Formats the text display to capital first letter
   // and with white spaces instead of underscores.
@@ -187,14 +238,16 @@ const EntryPreviewList = ({
 
 export default EntryPreviewList;
 
+//#region Styled Objects
 const StyledFormContainer = styled.div`
   position: relative;
   display: grid;
   grid-template-columns: 3fr 2fr;
-  grid-template-rows: 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
   grid-template-areas:
     "input input"
-    "filterBy search";
+    "filterBy search"
+    "sortBy sortBy";
   column-gap: 5%;
   padding: 0 5% 0 5%;
   margin: 0;
@@ -212,15 +265,15 @@ const StyledInput = styled.input`
 `;
 
 const StyledButton = styled.input`
-  grid-area: ${({ filterby, search }) =>
-    filterby ? "filterBy" : search ? "search" : "none"};
+  grid-area: ${({ $filterBy, $search, $sortBy }) =>
+    $filterBy ? "filterBy" : $search ? "search" : $sortBy ? "sortBy" : "none"};
   margin: 0 0 10px 0;
   padding: 0.5rem;
   border: 2px solid #448;
   border-radius: 10px;
   font-size: 1rem;
-  background-color: ${({ filterby, search }) =>
-    filterby ? "#4090cc" : search ? "#40cc90" : "white"};
+  background-color: ${({ $filterBy, $search, $sortBy }) =>
+    $filterBy || $sortBy ? "#4090cc" : $search ? "#40cc90" : "white"};
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -229,7 +282,7 @@ const StyledButton = styled.input`
 const StyledDropdown = styled.div`
   position: absolute;
   z-index: 1;
-  top: 100px;
+  top: 150px;
   margin: 0 0 0 5%;
   padding: 5px;
   width: 90%;
@@ -259,3 +312,4 @@ const StyledDropdownListing = styled.button`
     filter: brightness(90%);
   }
 `;
+//#endregion
