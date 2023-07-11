@@ -1,9 +1,11 @@
 import styled from "styled-components";
 import Link from "next/link";
+import Image from "next/image";
 // Hooks
 import { useState } from "react";
 // SVGs
 import { ImageIcon, CaretRightIcon, CaretDownIcon } from "../svgs";
+import { fill } from "@cloudinary/url-gen/actions/resize";
 
 const EntryPreview = ({ entryData }) => {
   const { _id: entryId } = entryData;
@@ -33,7 +35,16 @@ const EntryPreview = ({ entryData }) => {
               {/* Name */}
               <StyledEntryName>{entryData.entryName}</StyledEntryName>
               {/* Icon */}
-              <StyledImageIcon />
+              {entryData.entryUploadFile ? (
+                <StyledImage
+                  src={entryData.entryUploadFile}
+                  alt="image"
+                  width={150}
+                  height={100}
+                />
+              ) : (
+                <StyledImageIcon />
+              )}
               {/* Tags */}
               <StyledTagContainer>
                 {entryData.entryTags.map((tag) => (
@@ -61,7 +72,16 @@ const EntryPreview = ({ entryData }) => {
               isexpanded={toggleExpander ? toggleExpander : null}
             >
               {/* Icon */}
-              <StyledImageIcon />
+              {entryData.entryUploadFile ? (
+                <StyledImage
+                  src={entryData.entryUploadFile}
+                  alt="image"
+                  width={200}
+                  height={100}
+                />
+              ) : (
+                <StyledImageIcon />
+              )}
               {/* Description */}
               <StyledEntryDescription>
                 {entryData.entryDescription}
@@ -167,6 +187,13 @@ const StyledEntryDescription = styled.p`
 `;
 
 const StyledImageIcon = styled(ImageIcon)`
+  grid-area: icon;
+  height: 100%;
+  max-height: 140px;
+  width: 100%;
+`;
+
+const StyledImage = styled(Image)`
   grid-area: icon;
   height: 100%;
   max-height: 140px;
