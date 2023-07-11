@@ -177,7 +177,6 @@ const EntryPreviewList = ({
       {entries.map((entryData) => {
         return <EntryPreview key={entryData._id} entryData={entryData} />;
       })}
-      ;
     </>
   );
 

@@ -41,6 +41,7 @@ const EntryPreview = ({ entryData }) => {
                   alt="image"
                   width={150}
                   height={100}
+                  style={{ objectFit: "contain" }}
                 />
               ) : (
                 <StyledImageIcon />
@@ -78,6 +79,7 @@ const EntryPreview = ({ entryData }) => {
                   alt="image"
                   width={200}
                   height={100}
+                  style={{ objectFit: "contain" }}
                 />
               ) : (
                 <StyledImageIcon />
@@ -175,7 +177,7 @@ const StyledEntryName = styled.p`
 
 const StyledEntryDescription = styled.p`
   grid-area: description;
-  max-height: 110px;
+  max-height: 100px;
   padding: 3px;
   margin: 0;
   word-wrap: break-word;

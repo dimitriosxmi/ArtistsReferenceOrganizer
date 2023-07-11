@@ -49,8 +49,9 @@ const EntryDetails = ({ editMode, toggleEditMode }) => {
             <StyledImage
               src={entryUploadFile}
               alt="image"
-              width={350}
-              height={180}
+              width={500}
+              height={500}
+              style={{ objectFit: "contain" }}
             />
           ) : null}
           {/* Link */}
@@ -86,6 +87,7 @@ const EntryDetails = ({ editMode, toggleEditMode }) => {
       ) : (
         <EntryForm editEntryData={entryData} toggleEditMode={toggleEditMode} />
       )}
+      <Space />
     </>
   );
 };
@@ -108,7 +110,7 @@ const StyledHeadline = styled.p`
 const StyledImage = styled(Image)`
   margin: 0 0 0 5%;
   width: 90%;
-  height: 180px;
+  height: 300px;
   border: 2px solid #223;
 `;
 
@@ -142,5 +144,10 @@ const StyledTagContainer = styled.div`
   align-items: center;
   width: 90%;
   padding-left: 5%;
+`;
+
+const Space = styled.div`
+  // Add margin by px amount, if not provided the default is 150px.
+  margin-bottom: ${({ px }) => (px ? `${px}px` : `150px`)};
 `;
 //#endregion

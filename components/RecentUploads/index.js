@@ -19,7 +19,7 @@ const RecentUploads = () => {
   return (
     <section>
       <StyledRecentUploadsText>{text}</StyledRecentUploadsText>
-      <EntryPreviewList recentEntriesAmount={20} hasData={setData} />
+      <EntryPreviewList recentEntriesAmount={8} hasData={setData} />
       <Space />
     </section>
   );

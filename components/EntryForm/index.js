@@ -63,8 +63,9 @@ const EntryForm = ({ editEntryData, toggleEditMode }) => {
                 : selectedFileSource
             }
             alt={"uploaded image"}
-            width={350}
-            height={180}
+            width={300}
+            height={300}
+            style={{ objectFit: "contain" }}
           />
         ) : null}
         <input
@@ -439,7 +440,7 @@ const StyledInput = styled.input`
 
 const StyledFileSelectLabel = styled.label`
   width: 90%;
-  height: 180px;
+  height: 300px;
   margin: 0 0 10px 5%;
   padding: 10%;
   display: flex;
