@@ -4,6 +4,8 @@ import { useRouter } from "next/router";
 import { useState, useEffect, useRef } from "react";
 // SVGs
 import { PlusIcon, PenIcon } from "../svgs";
+// Component
+import Image from "next/image";
 
 const EntryForm = ({ editEntryData, toggleEditMode }) => {
   const router = useRouter();
@@ -18,7 +20,15 @@ const EntryForm = ({ editEntryData, toggleEditMode }) => {
   const [dropdownSelection, setDropdownSelection] = useState({
     folderName: "-- Select A Folder --",
   });
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [selectedFileSource, setSelectedFileSource] = useState(
+    editEntryData?.entryUploadFile ? editEntryData.entryUploadFile : null
+  );
+  const [selectedFileName, setSelectedFileName] = useState(
+    editEntryData?.entryUploadFile ? editEntryData.entryUploadFile : ""
+  );
   const tagInputElement = useRef();
+  const imageFileInputElement = useRef();
 
   // GET's the tags and folders list from database.
   useEffect(() => {
@@ -41,6 +51,40 @@ const EntryForm = ({ editEntryData, toggleEditMode }) => {
         autoFocus
         defaultValue={editEntryData ? editEntryData.entryName : ""}
       />
+      <StyledFileSelectLabel
+        $selectedImage={selectedFileName !== "" ? true : null}
+      >
+        {selectedFileName === "" ? "Tap me to select an Image" : null}
+        {selectedFileSource ? (
+          <Image
+            src={
+              editEntryData && !selectedFileSource
+                ? editEntryData.entryUploadFile
+                : selectedFileSource
+            }
+            alt={"uploaded image"}
+            width={300}
+            height={300}
+            style={{ objectFit: "contain" }}
+          />
+        ) : null}
+        <input
+          type="file"
+          name="file"
+          accept="image/png, image/jpeg, image/jpg"
+          onChange={handleOnImageSelect}
+          ref={imageFileInputElement}
+        />
+      </StyledFileSelectLabel>
+      {selectedFileName !== "" ? (
+        <StyledFileRemoveButtonContainer>
+          <StyledFileRemoveButton
+            type="button"
+            value="❌ Remove Image"
+            onClick={handleOnClickRemoveImage}
+          />
+        </StyledFileRemoveButtonContainer>
+      ) : null}
       {/* Entry reference link input. */}
       <StyledLabel htmlFor="entryReferenceLink">Refrence a Link:</StyledLabel>
       <StyledTextArea
@@ -183,6 +227,30 @@ const EntryForm = ({ editEntryData, toggleEditMode }) => {
     }
   }
 
+  // Store the selected file name and file path.
+  function handleOnImageSelect(event) {
+    // Take input value and clean up the path
+    // down to only the file name and type.
+    const fileName = event.target.value.replace(/.*[\/\\]/, "");
+    setSelectedFileName(fileName);
+
+    const reader = new FileReader();
+
+    reader.onload = function (onLoadEvent) {
+      setSelectedFileSource(onLoadEvent.target.result);
+      setSelectedFile(undefined);
+    };
+
+    reader.readAsDataURL(event.target.files[0]);
+  }
+
+  // Remove selected file.
+  function handleOnClickRemoveImage() {
+    setSelectedFile(null);
+    setSelectedFileName("");
+    setSelectedFileSource(null);
+  }
+
   // Toggle Dropdown window
   function handleOnClickDropdown() {
     setToggleDropdown(!toggleDropdown);
@@ -287,6 +355,39 @@ const EntryForm = ({ editEntryData, toggleEditMode }) => {
       ? (data.entrySelectedFolder = folderId)
       : null;
 
+    if (selectedFileName !== "") {
+      // Prepare the image data for POST.
+      const _form = event.currentTarget;
+      const _fileInput = Array.from(_form.elements).find(
+        ({ name }) => name === "file"
+      );
+      const _formData = new FormData();
+
+      for (const file of _fileInput.files) {
+        _formData.append("file", file);
+      }
+
+      _formData.append("upload_preset", "my-uploads");
+
+      // POST the image to cloudinary.
+      const _data = await fetch(
+        `https://api.cloudinary.com/v1_1/${process.env.NEXT_PUBLIC_CLOUD_NAME}/image/upload`,
+        {
+          method: "POST",
+          body: _formData,
+        }
+      ).then((response) => response.json());
+
+      // Collect Data.
+      setSelectedFileSource(_data.secure_url);
+      setSelectedFile(_data);
+
+      // Pass image url to entry.
+      data.entryUploadFile = _data.secure_url;
+    } else {
+      data.entryUploadFile = null;
+    }
+
     if (editEntryData) {
       // PATCH the edited entry.
       const response = await fetch(`/api/entry?entryId=${editEntryData._id}`, {
@@ -334,6 +435,55 @@ const StyledInput = styled.input`
   height: 2rem;
   padding: 0.5rem;
   text-overflow: ellipsis;
+  font-size: 1rem;
+`;
+
+const StyledFileSelectLabel = styled.label`
+  width: 90%;
+  height: 300px;
+  margin: 0 0 10px 5%;
+  padding: 10%;
+  display: flex;
+  align-items: center;
+  border: 2px dashed #448;
+  background-color: white;
+  overflow: hidden;
+  word-break: break-word;
+
+  font-size: 1.5rem;
+  text-align: center;
+  cursor: pointer;
+
+  input[type="file"] {
+    display: none;
+  }
+
+  &:hover {
+    filter: brightness(90%);
+  }
+
+  &:active {
+    filter: brightness(70%);
+  }
+
+  ${({ $selectedImage }) =>
+    $selectedImage
+      ? `
+    padding: 0;
+  `
+      : null}
+`;
+
+const StyledFileRemoveButtonContainer = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  margin: 20px 5% 0 0;
+`;
+
+const StyledFileRemoveButton = styled.input`
+  border-radius: 10px;
+  background: #faa;
+  border: 2px solid #223;
   font-size: 1rem;
 `;
 

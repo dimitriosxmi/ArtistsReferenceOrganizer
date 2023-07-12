@@ -43,8 +43,8 @@ const StyledLink = styled(Link)`
   position: fixed;
   bottom: 1%;
   right: 5%;
-  width: 100px;
-  height: 100px;
+  width: 110px;
+  height: 110px;
   text-decoration: none;
   color: inherit;
 `;
@@ -54,6 +54,6 @@ const StyledParagraphText = styled.p`
   font-size: 0.9rem;
   font-weight: 900;
   position: relative;
-  bottom: 225%;
+  bottom: 200%;
 `;
 //#endregion

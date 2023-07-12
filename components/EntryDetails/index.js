@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import Image from "next/image";
 // Hooks
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
@@ -26,8 +27,13 @@ const EntryDetails = ({ editMode, toggleEditMode }) => {
 
   if (!entryData) return <p>Loading..</p>;
 
-  const { entryName, entryReferenceLink, entryTags, entryDescription } =
-    entryData;
+  const {
+    entryName,
+    entryUploadFile,
+    entryReferenceLink,
+    entryTags,
+    entryDescription,
+  } = entryData;
 
   return (
     <>
@@ -38,28 +44,50 @@ const EntryDetails = ({ editMode, toggleEditMode }) => {
         <>
           {/* Name  */}
           <StyledHeadline>{entryName}</StyledHeadline>
+          {/* Image */}
+          {entryUploadFile ? (
+            <StyledImage
+              src={entryUploadFile}
+              alt="image"
+              width={500}
+              height={500}
+              style={{ objectFit: "contain" }}
+            />
+          ) : null}
           {/* Link */}
-          <StyledText bold>Link:</StyledText>
-          <StyledText borderBottom>{entryReferenceLink}</StyledText>
+          {entryReferenceLink ? (
+            <>
+              <StyledText bold>Link:</StyledText>
+              <StyledText borderBottom>{entryReferenceLink}</StyledText>{" "}
+            </>
+          ) : null}
+
           {/* Tags */}
-          <StyledTagContainer>
-            <StyledText noMargin bold>
-              Tags:
-            </StyledText>
-            {entryTags.map((tag) => (
-              <StyledTagCard key={tag._id}>{tag.tagName}</StyledTagCard>
-            ))}
-          </StyledTagContainer>
+          {entryTags ? (
+            <StyledTagContainer>
+              <StyledText noMargin bold>
+                Tags:
+              </StyledText>
+              {entryTags.map((tag) => (
+                <StyledTagCard key={tag._id}>{tag.tagName}</StyledTagCard>
+              ))}
+            </StyledTagContainer>
+          ) : null}
           {/* Description */}
-          <StyledText borderTop bold>
-            Description:
-          </StyledText>
-          <StyledText>{entryDescription}</StyledText>
+          {entryDescription ? (
+            <>
+              <StyledText borderTop bold>
+                Description:
+              </StyledText>
+              <StyledText>{entryDescription}</StyledText>
+            </>
+          ) : null}
           <EditEntryButton toggleEditMode={toggleEditMode} />
         </>
       ) : (
         <EntryForm editEntryData={entryData} toggleEditMode={toggleEditMode} />
       )}
+      <Space />
     </>
   );
 };
@@ -77,6 +105,13 @@ const StyledHeadline = styled.p`
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+`;
+
+const StyledImage = styled(Image)`
+  margin: 0 0 0 5%;
+  width: 90%;
+  height: 300px;
+  border: 2px solid #223;
 `;
 
 const StyledText = styled.p`
@@ -109,5 +144,10 @@ const StyledTagContainer = styled.div`
   align-items: center;
   width: 90%;
   padding-left: 5%;
+`;
+
+const Space = styled.div`
+  // Add margin by px amount, if not provided the default is 150px.
+  margin-bottom: ${({ px }) => (px ? `${px}px` : `150px`)};
 `;
 //#endregion
